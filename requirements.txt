@@ -1,0 +1,5 @@
+flask
+requests
+vaderSentiment
+mysql-connector-python
+pytest

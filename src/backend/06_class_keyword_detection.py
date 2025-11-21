@@ -1,0 +1,2 @@
+class KeyWordDetection:
+    pass

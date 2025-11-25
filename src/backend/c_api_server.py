@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, redirect, url_for
-from b_db_utils import like_public_entry, see_public_feed, see_post_by_id
+from b_db_utils import like_public_entry, see_public_feed, see_post_by_id, user_entry
 
 app = Flask(__name__)
 
@@ -31,17 +31,25 @@ def support_hub():
     # return jsonify(support_hub() - name of function in db_utils)
     pass
 
-# TO COMPLETE add public entry
+# route to handle creating a new public or private entry
 @app.route('/feed', methods=['POST'])
 def add_public_entry():
-    # public_entry = request.get_json()
-    # try:
-    #     user_entry(public_entry) - name of function in db_utils
-    #     return jsonify({'status': 'success', 'message': 'Entry added.'})
-    # except Exception as e:
-    #     return jsonify({'status': 'error', 'message': str(e)}), 400
-    pass
+    entry_data = request.get_json()
+    # if no JSON was sent, return an error (validation)
+    if not entry_data:
+        return jsonify({"error": "No data provided"}), 400
 
+    try:
+        # call the DB function to insert the post into posts_table
+        new_post_id = user_entry(entry_data)
+        return jsonify({
+            "status": "success",
+            "message": "Entry added.",
+            "post_id": new_post_id
+        }), 201
+    except Exception as e:
+        # if anything goes wrong, return an error response
+        return jsonify({"status": "error", "message": str(e)}), 400
 
 # establishing a GET route for the user to see public posts by the post_id.
 # This is a necessary rereroute to the below like_pub_entry function, which is a POST route.

@@ -71,9 +71,41 @@ def user_specific_posts(username):
 def support_hub():
     pass
 
-# TO COMPLETE function to add an entry
-def user_entry():
-    pass
+# function to add a new post into the SQL database
+def user_entry(entry_data, db_name="my_CFG_project_test_likes"):
+    """
+    entry_data should contain a dict:
+    {
+        "name": "username",
+        "post": "the content of the post",
+        "private_public": "public" or "private"
+    }
+    """
+    connection = _connect_to_db(db_name)
+    cursor = connection.cursor()
+
+    sql = """
+        INSERT INTO posts_table (name, post, private_public, likes, userlikes)
+        VALUES (%s, %s, %s, %s, %s)
+    """
+
+    values = (
+        entry_data["name"],
+        entry_data["post"],
+        entry_data["private_public"],
+        0,
+        "None"
+    )
+
+    cursor.execute(sql, values)
+    connection.commit()
+
+    new_post_id = cursor.lastrowid
+
+    cursor.close()
+    connection.close()
+
+    return new_post_id
 
 # function connecting to the SQL DB to change the likes and userlikes column in SQL
 def like_public_entry(userlike, post_id):

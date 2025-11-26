@@ -38,7 +38,6 @@ def add_public_entry():
     # if no JSON was sent, return an error (validation)
     if not entry_data:
         return jsonify({"error": "No data provided"}), 400
-
     try:
         # call the DB function to insert the post into posts_table
         new_post_id = user_entry(entry_data)

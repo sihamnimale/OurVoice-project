@@ -26,7 +26,6 @@ def see_public_feed():
     db_name = 'my_CFG_project_test_likes'
     db_connection = _connect_to_db(db_name)
     cur = db_connection.cursor()
-
     db_connection.start_transaction()
     # the query specifies we only want public posts to be viewable on Flask
     query = """SELECT * FROM posts_table
@@ -83,28 +82,16 @@ def user_entry(entry_data, db_name="my_CFG_project_test_likes"):
     """
     connection = _connect_to_db(db_name)
     cursor = connection.cursor()
-
     sql = """
         INSERT INTO posts_table (name, post, private_public, likes, userlikes)
         VALUES (%s, %s, %s, %s, %s)
     """
-
-    values = (
-        entry_data["name"],
-        entry_data["post"],
-        entry_data["private_public"],
-        0,
-        "None"
-    )
-
+    values = (entry_data["name"], entry_data["post"], entry_data["private_public"], 0, "None")
     cursor.execute(sql, values)
     connection.commit()
-
     new_post_id = cursor.lastrowid
-
     cursor.close()
     connection.close()
-
     return new_post_id
 
 # function connecting to the SQL DB to change the likes and userlikes column in SQL

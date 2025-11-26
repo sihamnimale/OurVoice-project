@@ -33,6 +33,25 @@ def like_entry(username, post_id):
         headers={'content-type': 'application/json'})
     return result.json()
 
+# # This function collects a user's journal entry from the terminal,
+# # asks whether the entry should be public or private, and then sends
+# # the data as JSON to the Flask API route POST /feed. The API then
+# # stores the entry in the SQL database. If the request is successful,
+# # the user is shown a confirmation message and the ID of their new post.
+def create_post(username):
+    print("\nCreate a New Post")
+    post_content = input("Write your entry:\n> ")
+    visibility = input("Make this public or private? (p/pr): ").lower()
+    private_public = "public" if visibility == "p" else "private"
+    entry_data = {"name": username,"post": post_content,"private_public": private_public}
+    url = "http://127.0.0.1:5000/feed"
+    result = requests.post(url, json=entry_data, headers={"content-type": "application/json"})
+    response_data = result.json()
+    if result.status_code == 201:
+        print("\nYour post has been created successfully!")
+        print("Post ID:", response_data["post_id"])
+    else:
+        print("\nSomething went wrong, please try again.")
 
 def run():
     pass

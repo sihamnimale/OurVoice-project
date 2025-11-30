@@ -15,13 +15,11 @@ def get_username_entries(username):
     # return result.json()
     pass
 
-# TO COMPLETE provide user with a list of support resources
-def support_hub():
-    # url = 'http://127.0.0.1:5000/support_hub'
-    # result = requests.get(url, headers={'content-type': 'application/json'})
-    # return result.json()
-    pass
-
+# TO provide user with a list of support resources
+def get_support_hub():
+    url = 'http://127.0.0.1:5000/support_hub'
+    result = requests.get(url, headers={'content-type': 'application/json'})
+    return result.json()
 
 # this function will enable the user to add a like a public entry in their feed
 # and their username will also be added to the userlikes column on SQL and to the list of

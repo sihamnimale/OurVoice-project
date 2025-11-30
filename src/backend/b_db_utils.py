@@ -1,5 +1,6 @@
 import mysql.connector
 from a_config import USER, PASSWORD, HOST
+from support_hub_data import resources
 
 # custom exception to handle database connection errors
 class DbConnectionError(Exception):
@@ -66,9 +67,9 @@ def see_post_by_id(post_id):
 def user_specific_posts(username):
     pass
 
-# TO COMPLETE function that directs the user to our support hub
+# function that directs the user to our support hub
 def support_hub():
-    pass
+    return resources # no SQL db required
 
 # function to add a new post into the SQL database
 def user_entry(entry_data, db_name="my_CFG_project_test_likes"):

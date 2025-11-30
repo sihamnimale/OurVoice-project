@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, redirect, url_for
-from b_db_utils import like_public_entry, see_public_feed, see_post_by_id, user_entry
+from b_db_utils import like_public_entry, see_public_feed, see_post_by_id, user_entry, support_hub
 
 app = Flask(__name__)
 
@@ -25,11 +25,14 @@ def username_entries(username):
     #     return jsonify({'status': 'error', 'message': str(e)}), 500
     pass
 
-# TO COMPLETE provides access to our support hub
+# provides access to our support hub
 @app.route('/support_hub')
-def support_hub():
-    # return jsonify(support_hub() - name of function in db_utils)
-    pass
+def support_hub_resources():
+    try: 
+        return jsonify(support_hub()) # name of function in db_utils
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+        
 
 # route to handle creating a new public or private entry
 @app.route('/feed', methods=['POST'])

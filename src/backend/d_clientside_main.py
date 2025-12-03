@@ -8,12 +8,11 @@ def get_public_feed():
     result = requests.get(url, headers={'content-type': 'application/json'})
     return result.json()
 
-# TO COMPLETE will provide a json of all public and private entries that user has input
+# this function will provide a json of all public and private entries that user has input
 def get_username_entries(username):
-    # result = requests.get(
-    #     f'http://127.0.0.1:5000/{username}',headers={'content-type': 'application/json'})
-    # return result.json()
-    pass
+    url = f'http://127.0.0.1:5000/{username}'
+    result = requests.get(url, headers={'content-type': 'application/json'})
+    return result.json()
 
 # TO COMPLETE provide user with a list of support resources
 def support_hub():
@@ -21,7 +20,6 @@ def support_hub():
     # result = requests.get(url, headers={'content-type': 'application/json'})
     # return result.json()
     pass
-
 
 # this function will enable the user to add a like a public entry in their feed
 # and their username will also be added to the userlikes column on SQL and to the list of

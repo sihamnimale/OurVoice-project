@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, redirect, url_for
-from b_db_utils import like_public_entry, see_public_feed, see_post_by_id, user_entry
+from b_db_utils import like_public_entry, see_public_feed, see_post_by_id, user_entry, user_specific_posts
 
 app = Flask(__name__)
 
@@ -13,17 +13,15 @@ def welcome():
 def public_feed():
     return jsonify(see_public_feed())
 
-
-# TO COMPLETE get public and private entries for that user by their username
+# route to get both public and private entries for that user by their username
 @app.route('/<username>')
 def username_entries(username):
-    # try:
-    #     entries_by_username = user_specific_posts(username) (user_specific_posts = function from db_utils)
-    #     print(entries_by_username)
-    #     return jsonify(entries_by_username)
-    # except Exception as e:
-    #     return jsonify({'status': 'error', 'message': str(e)}), 500
-    pass
+    try:
+        entries_by_username = user_specific_posts(username) # user_specific_posts = function from db_utils
+        print(entries_by_username)
+        return jsonify(entries_by_username)
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # TO COMPLETE provides access to our support hub
 @app.route('/support_hub')

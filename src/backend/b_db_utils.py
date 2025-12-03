@@ -62,9 +62,27 @@ def see_post_by_id(post_id):
 
     return post
 
-# TO COMPLETE function to obtain public and private posts from a specific user
+# function to obtain public and private posts from a specific user
 def user_specific_posts(username):
-    pass
+    db_name = ""
+    db_connection = _connect_to_db(db_name)
+    cur = db_connection.cursor()
+
+    # query both public and private posts for a specific user from the most recent posts to be viewed
+    db_connection.start_transaction()
+    query = """
+        SELECT * FROM posts_table
+        WHERE name = %s
+        ORDER BY post_id DESC
+    """
+
+    cur.execute(query, (username,))
+    user_posts = cur.fetchall()
+    
+    if db_connection:
+        cur.close()
+        db_connection.close()
+    return user_posts
 
 # TO COMPLETE function that directs the user to our support hub
 def support_hub():

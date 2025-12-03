@@ -14,12 +14,11 @@ def get_username_entries(username):
     result = requests.get(url, headers={'content-type': 'application/json'})
     return result.json()
 
-# TO COMPLETE provide user with a list of support resources
-def support_hub():
-    # url = 'http://127.0.0.1:5000/support_hub'
-    # result = requests.get(url, headers={'content-type': 'application/json'})
-    # return result.json()
-    pass
+# TO provide user with a list of support resources
+def get_support_hub():
+    url = 'http://127.0.0.1:5000/support_hub'
+    result = requests.get(url, headers={'content-type': 'application/json'})
+    return result.json()
 
 # this function will enable the user to add a like a public entry in their feed
 # and their username will also be added to the userlikes column on SQL and to the list of
@@ -54,10 +53,10 @@ def create_post(username):
 def run():
     pass
 
-
 # PRACTICE: run() function code for like/userlike functionality
 username = input("What is your username? ")
 list_of_userlikes = user_likes(1) # this function is from DB_utils
+
 if username in list_of_userlikes:
     print("You have already liked this post.")
 else:
@@ -65,3 +64,26 @@ else:
     if like_y_n == "y":
         response = like_entry(username, 1)
         print(f"Thank you, {username}, for liking this post:", response)
+
+# Display the Support Hub category
+hub = get_support_hub()
+categories = hub["categories"]
+
+print("Choose a Support Category:")
+for key, value in categories.item():
+    print(f"{key}. {value["category"]}")
+
+chosen_category = input("Enter the category number: ")
+if chosen_category not in categories:
+    print("Invalid. Please select the category number from the list.")
+
+print(f"{categories[chosen_category]["support"]}:")
+for item in categories[chosen_category]["support"]:
+    print({item["name"]})
+    if "phone" in item:
+        print(f"Phone: {item["phone"]}")
+    if "Text" in item:
+        print(f"Text: {item["Text"]}")
+    if "website" in item:
+        print(f"Website: {item["website"]}")
+    print()

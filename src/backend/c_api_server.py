@@ -23,11 +23,14 @@ def username_entries(username):
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
-# TO COMPLETE provides access to our support hub
+# provides access to our support hub
 @app.route('/support_hub')
-def support_hub():
-    # return jsonify(support_hub() - name of function in db_utils)
-    pass
+def support_hub_resources():
+    try: 
+        return jsonify(support_hub()) # name of function in db_utils
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+        
 
 # route to handle creating a new public or private entry
 @app.route('/feed', methods=['POST'])

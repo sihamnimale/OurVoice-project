@@ -8,12 +8,11 @@ def get_public_feed():
     result = requests.get(url, headers={'content-type': 'application/json'})
     return result.json()
 
-# TO COMPLETE will provide a json of all public and private entries that user has input
+# this function will provide a json of all public and private entries that user has input
 def get_username_entries(username):
-    # result = requests.get(
-    #     f'http://127.0.0.1:5000/{username}',headers={'content-type': 'application/json'})
-    # return result.json()
-    pass
+    url = f'http://127.0.0.1:5000/{username}'
+    result = requests.get(url, headers={'content-type': 'application/json'})
+    return result.json()
 
 # TO provide user with a list of support resources
 def get_support_hub():

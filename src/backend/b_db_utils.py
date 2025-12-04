@@ -1,6 +1,5 @@
 import mysql.connector
 from a_config import USER, PASSWORD, HOST
-from support_hub_data import resources
 
 # custom exception to handle database connection errors
 class DbConnectionError(Exception):
@@ -85,27 +84,26 @@ def user_specific_posts(username):
         db_connection.close()
     return user_posts
 
-# function that directs the user to our support hub
-def support_hub():
-    return resources # no SQL db required
-
 # function to add a new post into the SQL database
 def user_entry(entry_data, db_name="my_CFG_project_test_likes"):
     """
     entry_data should contain a dict:
     {
         "name": "username",
+        "title": "title of the post"
         "post": "the content of the post",
         "private_public": "public" or "private"
+        "hashtags": "hashtags"
     }
     """
     connection = _connect_to_db(db_name)
     cursor = connection.cursor()
     sql = """
-        INSERT INTO posts_table (name, post, private_public, likes, userlikes)
-        VALUES (%s, %s, %s, %s, %s)
+        INSERT INTO posts_table (name, title, post, private_public, likes, userlikes, hashtags)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
     """
-    values = (entry_data["name"], entry_data["post"], entry_data["private_public"], 0, "None")
+    values = (entry_data["name"], entry_data["title"], entry_data["post"], entry_data["private_public"],
+              0, "", entry_data["hashtags"])
     cursor.execute(sql, values)
     connection.commit()
     new_post_id = cursor.lastrowid

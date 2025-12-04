@@ -1,6 +1,6 @@
 import requests
 from b_db_utils import user_likes
-# import classes for run function
+from f_class_hashtag_recs import HashtagRecs
 
 # this function will enable the user to see all public posts via the Flask interface
 def get_public_feed():
@@ -30,6 +30,26 @@ def like_entry(username, post_id):
         headers={'content-type': 'application/json'})
     return result.json()
 
+# this function produces hashtag recommendations by calling from f_class_hashtag_recs 
+def hashtag_generation(post):
+    hashtag_recs = HashtagRecs()
+
+    # using the methods in the HashtagRecs class, we are now extract keywords from the user's post and
+    # converting those into a list of hashtags to reocmmend to the user
+    keywords = hashtag_recs.extract_keywords(post)
+    hashtags = hashtag_recs.generate_hashtags(keywords)
+
+    hashtags_q = input(f"Thank you so much for sharing!"
+                       f"\nWould you like to include some hashtags (Y/N)? ").lower()
+
+    if hashtags_q == "y":
+        print(f"Here are some hashtags I can recommend: {hashtags}")
+        user_hashtags = input("Your hashtags: ")
+    else:
+        user_hashtags = ""
+
+    return user_hashtags
+
 # # This function collects a user's journal entry from the terminal,
 # # asks whether the entry should be public or private, and then sends
 # # the data as JSON to the Flask API route POST /feed. The API then
@@ -37,33 +57,47 @@ def like_entry(username, post_id):
 # # the user is shown a confirmation message and the ID of their new post.
 def create_post(username):
     print("\nCreate a New Post")
+
+    title = input("Title of your entry: ")
     post_content = input("Write your entry:\n> ")
-    visibility = input("Make this public or private? (p/pr): ").lower()
-    private_public = "public" if visibility == "p" else "private"
-    entry_data = {"name": username,"post": post_content,"private_public": private_public}
+    private_public = input("Make this public or private? ").lower()
+    user_hashtags = hashtag_generation(post_content) # calling the hashtags function above
+
+    entry_data = {"name": username, "title": title, "post": post_content,"private_public": private_public,
+                  "hashtags": user_hashtags}
+
     url = "http://127.0.0.1:5000/feed"
     result = requests.post(url, json=entry_data, headers={"content-type": "application/json"})
     response_data = result.json()
+
     if result.status_code == 201:
         print("\nYour post has been created successfully!")
         print("Post ID:", response_data["post_id"])
     else:
         print("\nSomething went wrong, please try again.")
+        print("STATUS CODE:", result.status_code)
+        print("RESPONSE:", response_data)
 
 def run():
     pass
 
 # PRACTICE: run() function code for like/userlike functionality
 username = input("What is your username? ")
-list_of_userlikes = user_likes(1) # this function is from DB_utils
 
-if username in list_of_userlikes:
-    print("You have already liked this post.")
-else:
-    like_y_n = input("Would you like to like this post? Y or N: ").lower()
+# we can use this helper function in the run function
+def like_helper_func():
+    like_y_n = input("Would you like to like a post? Y or N: ").lower()
     if like_y_n == "y":
-        response = like_entry(username, 1)
-        print(f"Thank you, {username}, for liking this post:", response)
+        post_id_like_post = input("Please provide the post_id of the post you want to like: ")
+        list_of_userlikes = user_likes(post_id_like_post)
+        if username in list_of_userlikes:
+            print("You have already liked this post.")
+        else:
+            response = like_entry(username, post_id_like_post)
+            print(f"Thank you, {username}, for liking this post:", response)
+
+# to test the create post function, since it now contain hashtag recommendation functionality
+create_post(username)
 
 # Display the Support Hub category
 hub = get_support_hub()

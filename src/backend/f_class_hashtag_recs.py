@@ -1,35 +1,30 @@
-# THIS FILE NEEDS MORE WORK TO MAKE IT INTO A FUNCTIONING CLASS CAPABLE OF INTERACTING WITH
-# THE CLIENTSIDE/MAIN FILE
-
+# nltk is a suite of natural language libraries and programes. There are many things you can do with NLTK
+# but for this task we have decided to use it for hashtag recommendations
 import nltk
 
-def downloads():
-    nltk.download('punkt')
-    nltk.download('punkt_tab')
-    nltk.download('averaged_perceptron_tagger')
-    nltk.download('averaged_perceptron_tagger_eng')
-
 class HashtagRecs:
-    def extract_keywords(content):
-        # Use NLTK to extract keywords from content
-        tokens = nltk.word_tokenize(content)
-        tags = nltk.pos_tag(tokens)
+    def __init__(self):
+        self.hashtags = []
+
+    # this function uses nltk to analyse the user's post to extract keywords from it and return a string of the keywords
+    def extract_keywords(self, content):
+        # the word_tokenize function splits the content into a list of words and punctuation
+        tokens = nltk.word_tokenize(content) 
+        # the pos_tag function then takes the tokenized content and adds a tag to each string tags is therefore 
+        # a list of tuples, the first element being a string from the content and the second being a tab
+        tags = nltk.pos_tag(tokens) 
+        # keywords is a list of the strings that have particular tags, e.g. "NN" denotes a singular noun
         keywords = [word for (word, tag) in tags if tag.startswith('NN') or tag == 'JJ' or tag == 'NNP']
         return keywords
+    
+    # this function takes the keywords and puts them into the class's one atrribute, which is a list called hashtags
+    def generate_hashtags(self, keywords):
+        self.hashtags = ['#' + keyword.lower() for keyword in keywords]
+        return self.hashtags
 
-    def generate_hashtags(keywords):
-        # Generate hashtags from keywords
-        hashtags = ['#' + keyword.lower() for keyword in keywords]
-        return hashtags
 
-    # Prompt the user to enter content
-    content = input("Enter the content you want to generate hashtags for: ")
 
-    # Extract keywords and generate hashtags
-    keywords = extract_keywords(content)
-    hashtags = generate_hashtags(keywords)
-
-    # Print the resulting hashtags
-    print("Generated hashtags:")
-    for hashtag in hashtags:
-        print(hashtag)
+nltk.download('punkt')
+nltk.download('punkt_tab')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('averaged_perceptron_tagger_eng')

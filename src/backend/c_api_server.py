@@ -27,7 +27,7 @@ def username_entries(username):
 @app.route('/support_hub')
 def support_hub_resources():
     try: 
-        return jsonify(support_hub()) # name of function in db_utils
+        return jsonify() # name of function in db_utils
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
         

@@ -14,7 +14,7 @@ def get_username_entries(username):
     result = requests.get(url, headers={'content-type': 'application/json'})
     return result.json()
 
-# TO provide user with a list of support resources
+# this function will provide user with a list of support resources
 def get_support_hub():
     url = 'http://127.0.0.1:5000/support_hub'
     result = requests.get(url, headers={'content-type': 'application/json'})
@@ -104,20 +104,22 @@ hub = get_support_hub()
 categories = hub["categories"]
 
 print("Choose a Support Category:")
-for key, value in categories.item():
+for key, value in categories.items():
     print(f"{key}. {value["category"]}")
 
 chosen_category = input("Enter the category number: ")
 if chosen_category not in categories:
     print("Invalid. Please select the category number from the list.")
 
-print(f"{categories[chosen_category]["support"]}:")
-for item in categories[chosen_category]["support"]:
-    print({item["name"]})
+print(f"\n{categories[chosen_category]["category"]}:\n")
+
+for idx, item in enumerate(categories[chosen_category]["support"], start = 1):
+    print(f"{idx:>2}. {item["name"]}")
+
     if "phone" in item:
-        print(f"Phone: {item["phone"]}")
+        print(f"    Phone: {item["phone"]}")
     if "Text" in item:
-        print(f"Text: {item["Text"]}")
+        print(f"    Text: {item["Text"]}")
     if "website" in item:
-        print(f"Website: {item["website"]}")
+        print(f"    Website: {item["website"]}")
     print()

@@ -123,3 +123,82 @@ for idx, item in enumerate(categories[chosen_category]["support"], start = 1):
     if "website" in item:
         print(f"    Website: {item["website"]}")
     print()
+
+
+def run():
+    """
+    Main clientside function:
+    - asks for a username
+    - shows a menu (see feed / write post / support hub / review entries / exit)
+    - calls helper functions to talk to the Flask API
+    Note: options 3 (support hub) and 4 (review previous posts) are not implemented yet.
+    """
+    print("Welcome to OurVoice, share a story, uplift others, journal privately and access our support hub. 💖✨")
+    username = input("Please enter your username: ").strip()
+
+    while not username:
+        username = input("Username cannot be empty. Please enter your username: ").strip()
+
+    while True:
+        print("\nWhat would you like to do next?")
+        print("1. See our feed")
+        print("2. Write a post (public/private)")
+        print("3. See our support hub")
+        print("4. Review your previous posts")
+        print("5. Exit")
+
+        choice = input("Enter 1–5: ").strip()
+
+        # 1. See our feed + like a post
+        if choice == "1":
+            posts = get_public_feed()
+
+            if not posts:
+                print("\nThere are no public posts yet.")
+            else:
+                print("\n--- Public Feed ---")
+                for post in posts:
+                    # post is [post_id, name, post, private_public, likes, userlikes]
+                    print(f"\nPost ID: {post[0]}")
+                    print(f"User: {post[1]}")
+                    print(f"Post: {post[2]}")
+                    print(f"Likes: {post[4]}")
+
+                like_choice = input("\nWould you like to like a post? (y/n): ").lower()
+                if like_choice == "y":
+                    post_id = input("Enter the Post ID you want to like: ").strip()
+
+                    if not post_id.isdigit():
+                        print("Invalid Post ID, please try again.")
+                    else:
+                        post_id_int = int(post_id)
+                        liked_users = user_likes(post_id_int)
+
+                        if username in liked_users:
+                            print("You have already liked this post.")
+                        else:
+                            response = like_entry(username, post_id_int)
+                            print("Thank you for liking this post.")
+                            print("Updated post:", response)
+
+        # 2. Write a post (this uses your create_post function)
+        elif choice == "2":
+            create_post(username)
+
+        # 3. See our support hub (not implemented yet)
+        elif choice == "3":
+            # TODO: implement support_hub() and display resources
+            pass
+
+        # 4. Review your previous posts (not implemented yet)
+        elif choice == "4":
+            # TODO: implement get_username_entries(username) and display entries
+            pass
+
+        # 5. Exit
+        elif choice == "5":
+            print("\nSee you next time, and thank you for using OurVoice. 😇🌟")
+            break
+
+        else:
+            print("Please enter a number between 1 and 5.")

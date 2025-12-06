@@ -119,7 +119,7 @@ for idx, item in enumerate(categories[chosen_category]['support'], start = 1):
     if "phone" in item:
         print(f"    Phone: {item['phone']}")
     if "text" in item:
-        print(f"    Text: {item['Text']}")
+        print(f"    Text: {item['text']}")
     if "website" in item:
         print(f"    Website: {item['website']}")
     print()

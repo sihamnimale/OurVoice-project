@@ -6,7 +6,7 @@ resources = {"categories": {
                         {"name": "Mind UK", "website": "https://www.mind.org.uk"},
                         {"name": "NHS Mental Health Support", "website": "https://www.nhs.uk/mental-health"},
                         {"name": "Anxiety UK", "website": "https://www.anxietyuk.org.uk"},
-                        {"name": "Shout 85258 (24/7 Textline)", "text": "SHOUT to 85258", "website": "https://giveusashout.org"},
+                        {"name": "Shout 85258 (24/7 Textline)", "Text": "SHOUT to 85258", "website": "https://giveusashout.org"},
                         {"name": "The Mix (Under 25s support)", "website": "https://www.themix.org.uk"},
                         {"name": "BEAT Eating Disorders (Body image + eating disorder support)", "website": "https://www.beateatingdisorders.org.uk"},
                         {"name": "CALM – Campaign Against Living Miserably", "website": "https://www.thecalmzone.net"}

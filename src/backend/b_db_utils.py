@@ -64,7 +64,7 @@ def see_post_by_id(post_id):
 
 # function to obtain public and private posts from a specific user
 def user_specific_posts(username):
-    db_name = ""
+    db_name = "my_CFG_project_test_likes"
     db_connection = _connect_to_db(db_name)
     cur = db_connection.cursor()
 

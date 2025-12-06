@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, redirect, url_for
-from b_db_utils import like_public_entry, see_public_feed, see_post_by_id, user_entry, user_specific_posts, support_hub
+from b_db_utils import like_public_entry, see_public_feed, see_post_by_id, user_entry, user_specific_posts
+from support_hub_data import resources
 
 app = Flask(__name__)
 
@@ -27,7 +28,7 @@ def username_entries(username):
 @app.route('/support_hub')
 def support_hub_resources():
     try: 
-        return jsonify() # name of function in db_utils
+        return jsonify(resources) # return resources dict as JSON
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
         

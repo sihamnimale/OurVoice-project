@@ -101,27 +101,27 @@ create_post(username)
 
 # Display the Support Hub category
 hub = get_support_hub()
-categories = hub["categories"]
+categories = hub['categories']
 
 print("Choose a Support Category:")
 for key, value in categories.items():
-    print(f"{key}. {value["category"]}")
+    print(f"{key}. {value['category']}")
 
 chosen_category = input("Enter the category number: ")
 if chosen_category not in categories:
     print("Invalid. Please select the category number from the list.")
 
-print(f"\n{categories[chosen_category]["category"]}:\n")
+print(f"\n{categories[chosen_category]['category']}:\n")
 
-for idx, item in enumerate(categories[chosen_category]["support"], start = 1):
-    print(f"{idx:>2}. {item["name"]}")
+for idx, item in enumerate(categories[chosen_category]['support'], start = 1):
+    print(f"{idx:>2}. {item['name']}")
 
     if "phone" in item:
-        print(f"    Phone: {item["phone"]}")
-    if "Text" in item:
-        print(f"    Text: {item["Text"]}")
+        print(f"    Phone: {item['phone']}")
+    if "text" in item:
+        print(f"    Text: {item['Text']}")
     if "website" in item:
-        print(f"    Website: {item["website"]}")
+        print(f"    Website: {item['website']}")
     print()
 
 

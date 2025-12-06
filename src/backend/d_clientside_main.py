@@ -124,16 +124,14 @@ for idx, item in enumerate(categories[chosen_category]['support'], start = 1):
         print(f"    Website: {item['website']}")
     print()
 
-
 def run():
     """
     Main clientside function:
     - asks for a username
-    - shows a menu (see feed / write post / support hub / review entries / exit)
+    - shows a menu (see feed / write post / support hub / review entries / wellness/career hub / exit)
     - calls helper functions to talk to the Flask API
-    Note: options 3 (support hub) and 4 (review previous posts) are not implemented yet.
     """
-    print("Welcome to OurVoice, share a story, uplift others, journal privately and access our support hub. 💖✨")
+    print("Welcome to OurVoice, share a story, uplift others, journal privately and access our support hub.")
     username = input("Please enter your username: ").strip()
 
     while not username:
@@ -145,9 +143,10 @@ def run():
         print("2. Write a post (public/private)")
         print("3. See our support hub")
         print("4. Review your previous posts")
-        print("5. Exit")
+        print("5. Wellness / Career Hub")
+        print("6. Exit")
 
-        choice = input("Enter 1–5: ").strip()
+        choice = input("Enter 1–6: ").strip()
 
         # 1. See our feed + like a post
         if choice == "1":
@@ -185,20 +184,59 @@ def run():
         elif choice == "2":
             create_post(username)
 
-        # 3. See our support hub (not implemented yet)
+        # 3. See our support hub
         elif choice == "3":
-            # TODO: implement support_hub() and display resources
-            pass
+            hub = get_support_hub()
+            categories = hub.get("categories", {})
 
-        # 4. Review your previous posts (not implemented yet)
+            if not categories:
+                print("\nSupport hub is currently unavailable.")
+            else:
+                print("\nChoose a Support Category:")
+                for key, value in categories.items():
+                    print(f"{key}. {value['category']}")
+
+                chosen_category = input("Enter the category number: ")
+                if chosen_category not in categories:
+                    print("Invalid. Please select the category number from the list.")
+                else:
+                    print(f"\n{categories[chosen_category]['category']}:\n")
+
+                    for idx, item in enumerate(categories[chosen_category]["support"], start=1):
+                        print(f"{idx:>2}. {item['name']}")
+
+                        if "phone" in item:
+                            print(f"    Phone: {item['phone']}")
+                        if "Text" in item:
+                            print(f"    Text: {item['Text']}")
+                        if "website" in item:
+                            print(f"    Website: {item['website']}")
+                        print()
+
+        # 4. Review your previous posts
         elif choice == "4":
-            # TODO: implement get_username_entries(username) and display entries
-            pass
+            posts = get_username_entries(username)
 
-        # 5. Exit
+            if not posts:
+                print("\nYou have no previous posts.")
+            else:
+                print("\n--- Your previous posts ---")
+                # assuming posts_table columns: post_id, name, title, post, private_public, likes, userlikes, hashtags
+                for post in posts:
+                    print(f"\nPost ID: {post[0]}")
+                    print(f"Title: {post[2]}")
+                    print(f"Post: {post[3]}")
+                    print(f"Visibility: {post[4]}")
+                    print(f"Likes: {post[5]}")
+
+        # 5. See our Wellness and Career hub (not implemented yet)
         elif choice == "5":
-            print("\nSee you next time, and thank you for using OurVoice. 😇🌟")
+            print("\nThe Wellness / Career Hub has not been implemented yet.")
+
+        # 6. Exit
+        elif choice == "6":
+            print("\nSee you next time, and thank you for using OurVoice. ☺️✨")
             break
 
         else:
-            print("Please enter a number between 1 and 5.")
+            print("Please enter a number between 1 and 6.")

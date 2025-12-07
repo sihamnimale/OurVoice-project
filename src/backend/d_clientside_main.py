@@ -1,7 +1,9 @@
 import requests
+import itertools
 from b_db_utils import user_likes
-from f_class_hashtag_recs import HashtagRecs
 from e_class_keyword_detection import KeywordDetection
+from f_class_hashtag_recs import HashtagRecs
+from g_class_affirmations import Affirmations
 
 # this function will enable the user to see all public posts via the Flask interface
 def get_public_feed():
@@ -95,16 +97,74 @@ def create_post(username):
     return post_content
 
 # we can use this helper function in the run function
-def like_helper_func():
-    like_y_n = input("Would you like to like a post? Y or N: ").lower()
+def like_helper_func(username):
+    like_y_n = input("\nWould you like to like a post? Y or N: ").lower()
     if like_y_n == "y":
-        post_id_like_post = input("Please provide the post_id of the post you want to like: ")
-        list_of_userlikes = user_likes(post_id_like_post)
-        if username in list_of_userlikes:
-            print("You have already liked this post.")
+        post_id = input("Please provide the post_id of the post you want to like: ")
+        if not post_id.isdigit():
+            print("Invalid Post ID, please try again.")
+        else:  
+            list_of_userlikes = user_likes(post_id)
+            if username in list_of_userlikes:
+                print("You have already liked this post.")
+            else:
+                response = like_entry(username, post_id)
+                print(f"Thank you, {username}, for liking this post:\n") 
+                print(f"\nPost ID: {post_id}")
+                print(f"User: {response[1]}")
+                print(f"Title: {response[2]}")
+                print(f"Post: {response[3]}")
+                print(f"Likes: {response[5]}")
+                print(f"Userlikes: {response[6]}")
+                print(f"Hashtags: {response[7]}")
+
+# support hub helper
+def support_hub_helper(categories):
+    if not categories:
+        print("\nSupport hub is currently unavailable.")
+    else:
+        print("\nChoose a Support Category:")
+        for key, value in categories.items():
+            print(f"{key}. {value['category']}")
+
+        chosen_category = input("Enter the category number: ")
+        if chosen_category not in categories:
+            print("Invalid. Please select the category number from the list.")
         else:
-            response = like_entry(username, post_id_like_post)
-            print(f"Thank you, {username}, for liking this post:", response)
+            print(f"\n{categories[chosen_category]['category']}:\n")
+
+            for idx, item in enumerate(categories[chosen_category]["support"], start=1):
+                print(f"{idx:>2}. {item['name']}")
+
+                if "phone" in item:
+                    print(f"    Phone: {item['phone']}")
+                if "Text" in item:
+                    print(f"    Text: {item['Text']}")
+                if "website" in item:
+                    print(f"    Website: {item['website']}")
+                print()
+
+
+def print_helper_func(array, username=None):
+    labs = ["\nPost ID: ", "Username: ", "Title: ", "Post: ", "Status: ", "Likes: ",
+            "Userlikes: ", "Hashtags: "]
+
+    if username is None:
+        labels = labs * len(array)
+        iter_array = list(itertools.chain.from_iterable(array))
+        for i, j in list(zip(labels, iter_array)):
+            print(i, j)
+
+    if username is not None:
+        username_array = []
+        for i in array:
+            if i[1] == username:
+                username_array.append(i)
+        labels = labs * len(username_array)
+        iter_array = list(itertools.chain.from_iterable(username_array))
+        for i, j in list(zip(labels, iter_array)):
+            print(i, j)
+
 
 def run():
     """
@@ -138,29 +198,8 @@ def run():
                 print("\nThere are no public posts yet.")
             else:
                 print("\n--- Public Feed ---")
-                for post in posts:
-                    # post is [post_id, name, post, private_public, likes, userlikes]
-                    print(f"\nPost ID: {post[0]}")
-                    print(f"User: {post[1]}")
-                    print(f"Post: {post[2]}")
-                    print(f"Likes: {post[4]}")
-
-                like_choice = input("\nWould you like to like a post? (y/n): ").lower()
-                if like_choice == "y":
-                    post_id = input("Enter the Post ID you want to like: ").strip()
-
-                    if not post_id.isdigit():
-                        print("Invalid Post ID, please try again.")
-                    else:
-                        post_id_int = int(post_id)
-                        liked_users = user_likes(post_id_int)
-
-                        if username in liked_users:
-                            print("You have already liked this post.")
-                        else:
-                            response = like_entry(username, post_id_int)
-                            print("Thank you for liking this post.")
-                            print("Updated post:", response)
+                print_helper_func(posts)
+                like_helper_func(username)
 
         # 2. Write a post (this uses your create_post function)
         elif choice == "2":
@@ -170,56 +209,14 @@ def run():
             if keyword_trigger(post_content):
                 hub = get_support_hub()
                 categories = hub['categories']
-
-                print("Choose a Support Category:")
-                for key, value in categories.items():
-                    print(f"{key}. {value['category']}")
-
-                chosen_category = input("Enter the category number:\n")
-                if chosen_category not in categories:
-                    print("Invalid. Please select the category number from the list.")
-                else:
-                    print(f"\n{categories[chosen_category]['category']}:\n")
-
-                for idx, item in enumerate(categories[chosen_category]['support'], start = 1):
-                    print(f"{idx:>2}. {item['name']}")
-
-                    if "phone" in item:
-                        print(f"    Phone: {item['phone']}")
-                    if "text" in item:
-                        print(f"    Text: {item['text']}")
-                    if "website" in item:
-                        print(f"    Website: {item['website']}")
-
+                support_hub_helper(categories)
+                
         # 3. See our support hub
         elif choice == "3":
             hub = get_support_hub()
-            categories = hub.get("categories", {})
-
-            if not categories:
-                print("\nSupport hub is currently unavailable.")
-            else:
-                print("\nChoose a Support Category:")
-                for key, value in categories.items():
-                    print(f"{key}. {value['category']}")
-
-                chosen_category = input("Enter the category number: ")
-                if chosen_category not in categories:
-                    print("Invalid. Please select the category number from the list.")
-                else:
-                    print(f"\n{categories[chosen_category]['category']}:\n")
-
-                    for idx, item in enumerate(categories[chosen_category]["support"], start=1):
-                        print(f"{idx:>2}. {item['name']}")
-
-                        if "phone" in item:
-                            print(f"    Phone: {item['phone']}")
-                        if "Text" in item:
-                            print(f"    Text: {item['Text']}")
-                        if "website" in item:
-                            print(f"    Website: {item['website']}")
-                        print()
-
+            categories = hub['categories']
+            support_hub_helper(categories)
+            
         # 4. Review your previous posts
         elif choice == "4":
             posts = get_username_entries(username)
@@ -227,14 +224,8 @@ def run():
             if not posts:
                 print("\nYou have no previous posts.")
             else:
-                print("\n--- Your previous posts ---")
-                # assuming posts_table columns: post_id, name, title, post, private_public, likes, userlikes, hashtags
-                for post in posts:
-                    print(f"\nPost ID: {post[0]}")
-                    print(f"Title: {post[2]}")
-                    print(f"Post: {post[3]}")
-                    print(f"Visibility: {post[4]}")
-                    print(f"Likes: {post[5]}")
+                print("\n--- Your previous posts ---")                
+                print_helper_func(posts, username=username)
 
         # 5. See our Wellness and Career hub (not implemented yet)
         elif choice == "5":

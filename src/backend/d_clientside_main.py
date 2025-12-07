@@ -1,6 +1,7 @@
 import requests
 from b_db_utils import user_likes
 from f_class_hashtag_recs import HashtagRecs
+from e_class_keyword_detection import KeywordDetection
 
 # this function will enable the user to see all public posts via the Flask interface
 def get_public_feed():
@@ -50,6 +51,19 @@ def hashtag_generation(post):
 
     return user_hashtags
 
+# this function detects keywords that could indicate support needed by calling from e_class_keyword_detection
+def keyword_trigger(post):
+    detector = KeywordDetection()
+    support_triggered = detector.detect_keywords(post)
+    # checks if keyword is detected then a message pops up to redirect them to the support hub
+    if support_triggered:
+        print("\nIt sounds like you may be going through a difficult time.")
+        print("Please consider visiting our Support Hub.\n")
+        input("Press Enter to continue...\n")
+        return True
+    
+    return False        
+
 # # This function collects a user's journal entry from the terminal,
 # # asks whether the entry should be public or private, and then sends
 # # the data as JSON to the Flask API route POST /feed. The API then
@@ -77,12 +91,8 @@ def create_post(username):
         print("\nSomething went wrong, please try again.")
         print("STATUS CODE:", result.status_code)
         print("RESPONSE:", response_data)
-
-def run():
-    pass
-
-# PRACTICE: run() function code for like/userlike functionality
-username = input("What is your username? ")
+    
+    return post_content
 
 # we can use this helper function in the run function
 def like_helper_func():
@@ -95,34 +105,6 @@ def like_helper_func():
         else:
             response = like_entry(username, post_id_like_post)
             print(f"Thank you, {username}, for liking this post:", response)
-
-# to test the create post function, since it now contain hashtag recommendation functionality
-create_post(username)
-
-# Display the Support Hub category
-hub = get_support_hub()
-categories = hub['categories']
-
-print("Choose a Support Category:")
-for key, value in categories.items():
-    print(f"{key}. {value['category']}")
-
-chosen_category = input("Enter the category number: ")
-if chosen_category not in categories:
-    print("Invalid. Please select the category number from the list.")
-
-print(f"\n{categories[chosen_category]['category']}:\n")
-
-for idx, item in enumerate(categories[chosen_category]['support'], start = 1):
-    print(f"{idx:>2}. {item['name']}")
-
-    if "phone" in item:
-        print(f"    Phone: {item['phone']}")
-    if "text" in item:
-        print(f"    Text: {item['text']}")
-    if "website" in item:
-        print(f"    Website: {item['website']}")
-    print()
 
 def run():
     """
@@ -182,7 +164,32 @@ def run():
 
         # 2. Write a post (this uses your create_post function)
         elif choice == "2":
-            create_post(username)
+            post_content = create_post(username)
+        
+            # if keyword is detected for support then redirect to support hub
+            if keyword_trigger(post_content):
+                hub = get_support_hub()
+                categories = hub['categories']
+
+                print("Choose a Support Category:")
+                for key, value in categories.items():
+                    print(f"{key}. {value['category']}")
+
+                chosen_category = input("Enter the category number:\n")
+                if chosen_category not in categories:
+                    print("Invalid. Please select the category number from the list.")
+                else:
+                    print(f"\n{categories[chosen_category]['category']}:\n")
+
+                for idx, item in enumerate(categories[chosen_category]['support'], start = 1):
+                    print(f"{idx:>2}. {item['name']}")
+
+                    if "phone" in item:
+                        print(f"    Phone: {item['phone']}")
+                    if "text" in item:
+                        print(f"    Text: {item['text']}")
+                    if "website" in item:
+                        print(f"    Website: {item['website']}")
 
         # 3. See our support hub
         elif choice == "3":
@@ -240,3 +247,6 @@ def run():
 
         else:
             print("Please enter a number between 1 and 6.")
+
+if __name__ == "__main__":
+    run()

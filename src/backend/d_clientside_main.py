@@ -33,71 +33,45 @@ def like_entry(username, post_id):
         headers={'content-type': 'application/json'})
     return result.json()
 
-# this function produces hashtag recommendations by calling from f_class_hashtag_recs 
-def hashtag_generation(post):
-    hashtag_recs = HashtagRecs()
+#--------------------------------------------------------------------------------------------
 
-    # using the methods in the HashtagRecs class, we are now extract keywords from the user's post and
-    # converting those into a list of hashtags to reocmmend to the user
-    keywords = hashtag_recs.extract_keywords(post)
-    hashtags = hashtag_recs.generate_hashtags(keywords)
+                                    # HELPER FUNCTIONS
 
-    hashtags_q = input(f"Thank you so much for sharing!"
-                       f"\nWould you like to include some hashtags (Y/N)? ").lower()
+#--------------------------------------------------------------------------------------------                                   
 
-    if hashtags_q == "y":
-        print(f"Here are some hashtags I can recommend: {hashtags}")
-        user_hashtags = input("Your hashtags: ")
-    else:
-        user_hashtags = ""
+# this helper function assists in condensing the run function by printing out posts when the user
+# wants to 1) see our public feed; 2) see their own public and private posts; and 3) see a post they
+# have liked.
 
-    return user_hashtags
+def print_helper_func(array, username=None, post_id = None):
+    labs = ["\nPost ID: ", "Username: ", "Title: ", "Post: ", "Status: ", "Likes: ",
+            "Userlikes: ", "Hashtags: "]
 
-# this function detects keywords that could indicate support needed by calling from e_class_keyword_detection
-def keyword_trigger(post):
-    detector = KeywordDetection()
-    support_triggered = detector.detect_keywords(post)
-    # checks if keyword is detected then a message pops up to redirect them to the support hub
-    if support_triggered:
-        print("\nIt sounds like you may be going through a difficult time.")
-        print("Please consider visiting our Support Hub.\n")
-        input("Press Enter to continue...\n")
-        return True
-    
-    return False        
+    # this if statement triggers when username and post_id are not set, i.e. when the user has opted to
+    # see our public feed.
+    if username is None and post_id is None:
+        labels = labs * len(array)
+        iter_array = list(itertools.chain.from_iterable(array))
+        for i, j in list(zip(labels, iter_array)):
+            print(i, j)
 
-# # This function collects a user's journal entry from the terminal,
-# # asks whether the entry should be public or private, and then sends
-# # the data as JSON to the Flask API route POST /feed. The API then
-# # stores the entry in the SQL database. If the request is successful,
-# # the user is shown a confirmation message and the ID of their new post.
-def create_post(username):
-    print("\nCreate a New Post")
+    # this if statement triggers when username is set but post_id is now, i.e. when the user has opted to
+    # see their own public and private posts.
+    if username is not None and post_id is None:
+        username_array = []
+        for i in array:
+            if i[1] == username:
+                username_array.append(i)
+        labels = labs * len(username_array)
+        iter_array = list(itertools.chain.from_iterable(username_array))
+        for i, j in list(zip(labels, iter_array)):
+            print(i, j)
 
-    title = input("Title of your entry: ")
-    post_content = input("Write your entry:\n> ")
-    private_public = input("Make this public or private? ").lower()
-    user_hashtags = hashtag_generation(post_content) # calling the hashtags function above
+# this helper function allows a user to decide if they want to like a post in their public feed. The like
+# is stored on SQL, as well as a list of users that have liked that pot already. If you have already
+# like a post, you will not be able to like it again.
 
-    entry_data = {"name": username, "title": title, "post": post_content,"private_public": private_public,
-                  "hashtags": user_hashtags}
-
-    url = "http://127.0.0.1:5000/feed"
-    result = requests.post(url, json=entry_data, headers={"content-type": "application/json"})
-    response_data = result.json()
-
-    if result.status_code == 201:
-        print("\nYour post has been created successfully!")
-        print("Post ID:", response_data["post_id"])
-    else:
-        print("\nSomething went wrong, please try again.")
-        print("STATUS CODE:", result.status_code)
-        print("RESPONSE:", response_data)
-    
-    return post_content
-
-# we can use this helper function in the run function
-def like_helper_func(username):
+def like_helper_func(array, username):
     like_y_n = input("\nWould you like to like a post? Y or N: ").lower()
     if like_y_n == "y":
         post_id = input("Please provide the post_id of the post you want to like: ")
@@ -110,13 +84,78 @@ def like_helper_func(username):
             else:
                 response = like_entry(username, post_id)
                 print(f"Thank you, {username}, for liking this post:\n") 
-                print(f"\nPost ID: {post_id}")
-                print(f"User: {response[1]}")
-                print(f"Title: {response[2]}")
-                print(f"Post: {response[3]}")
-                print(f"Likes: {response[5]}")
-                print(f"Userlikes: {response[6]}")
-                print(f"Hashtags: {response[7]}")
+                labs = ["Post ID: ", "Username: ", "Title: ", "Post: ", "Status: ", "Likes: ",
+                "Userlikes: ", "Hashtags: "]
+                for i, j in list(zip(labs, response)):
+                    print(i, j)
+
+# this helper function produces hashtag recommendations by calling from f_class_hashtag_recs, it is incorporated
+# into the create_post function below.
+
+def hashtag_generation(post):
+    hashtag_recs = HashtagRecs()
+
+    # using the methods in the HashtagRecs class, we are now extract keywords from the user's post and
+    # converting those into a list of hashtags to reocmmend to the user
+    keywords = hashtag_recs.extract_keywords(post)
+    hashtags = hashtag_recs.generate_hashtags(keywords)
+
+    hashtags_q = input(f"\nThank you so much for sharing!"
+                       f"\nWould you like to include some hashtags (Y/N)? ").lower()
+
+    if hashtags_q == "y":
+        print(f"\nHere are some hashtags I can recommend: {hashtags}")
+        user_hashtags = input("\nYour hashtags: ")
+    else:
+        user_hashtags = ""
+
+    return user_hashtags
+
+# this helper function detects keywords that could indicate that support is needed by the user by calling from the 
+# e_class_keyword_detection
+
+def keyword_trigger(post):
+    detector = KeywordDetection()
+    support_triggered = detector.detect_keywords(post)
+    # checks if keyword is detected then a message pops up to redirect them to the support hub
+    if support_triggered:
+        print("\nIt sounds like you may be going through a difficult time.")
+        print("Please consider visiting our Support Hub.\n")
+        input("Press Enter to continue...\n")
+        return True
+    
+    return False        
+
+# This function collects a user's journal entry from the terminal,
+# asks whether the entry should be public or private, and then sends
+# the data as JSON to the Flask API route POST /feed. The API then
+# stores the entry in the SQL database. If the request is successful,
+# the user is shown a confirmation message and the ID of their new post.
+
+def create_post(username):
+    print("\nCreate a New Post")
+
+    title = input("\nTitle of your entry: ")
+    post_content = input("\nWrite your entry:\n> ")
+    private_public = input("\nMake this public or private? ").lower()
+    user_hashtags = hashtag_generation(post_content) # calling the hashtags function above
+
+    entry_data = {"name": username, "title": title, "post": post_content,"private_public": private_public,
+                  "hashtags": user_hashtags}
+
+    url = "http://127.0.0.1:5000/feed"
+    result = requests.post(url, json=entry_data, headers={"content-type": "application/json"})
+    response_data = result.json()
+
+    if result.status_code == 201:
+        print("\nYour post has been created successfully!")
+        
+    else:
+        print("\nSomething went wrong, please try again.")
+        print("STATUS CODE:", result.status_code)
+        print("RESPONSE:", response_data)
+    
+    return post_content
 
 # support hub helper
 def support_hub_helper(categories):
@@ -143,27 +182,6 @@ def support_hub_helper(categories):
                 if "website" in item:
                     print(f"    Website: {item['website']}")
                 print()
-
-
-def print_helper_func(array, username=None):
-    labs = ["\nPost ID: ", "Username: ", "Title: ", "Post: ", "Status: ", "Likes: ",
-            "Userlikes: ", "Hashtags: "]
-
-    if username is None:
-        labels = labs * len(array)
-        iter_array = list(itertools.chain.from_iterable(array))
-        for i, j in list(zip(labels, iter_array)):
-            print(i, j)
-
-    if username is not None:
-        username_array = []
-        for i in array:
-            if i[1] == username:
-                username_array.append(i)
-        labels = labs * len(username_array)
-        iter_array = list(itertools.chain.from_iterable(username_array))
-        for i, j in list(zip(labels, iter_array)):
-            print(i, j)
 
 
 def run():
@@ -199,7 +217,7 @@ def run():
             else:
                 print("\n--- Public Feed ---")
                 print_helper_func(posts)
-                like_helper_func(username)
+                like_helper_func(posts, username)
 
         # 2. Write a post (this uses your create_post function)
         elif choice == "2":
@@ -210,6 +228,10 @@ def run():
                 hub = get_support_hub()
                 categories = hub['categories']
                 support_hub_helper(categories)
+            else:
+                # affirmations
+                affirmation = Affirmations()    
+                print(f"\nHere is your personalised affirmation: {affirmation.personalised_affirmation(post_content)}")
                 
         # 3. See our support hub
         elif choice == "3":

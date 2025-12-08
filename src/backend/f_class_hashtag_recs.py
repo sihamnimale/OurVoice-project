@@ -21,10 +21,3 @@ class HashtagRecs:
     def generate_hashtags(self, keywords):
         self.hashtags = ['#' + keyword.lower() for keyword in keywords]
         return self.hashtags
-
-
-
-nltk.download('punkt')
-nltk.download('punkt_tab')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('averaged_perceptron_tagger_eng')

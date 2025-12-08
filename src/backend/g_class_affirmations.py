@@ -84,5 +84,3 @@ class Affirmations(SentimentAnalysis):
         return self.get_affirmation(category)
 
 
-aff = Affirmations()
-print(aff.personalised_affirmation("I am very sad today"))

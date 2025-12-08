@@ -6,7 +6,7 @@ class KeywordDetection:
         self.keywords = [
         "anxiety","panic","unease", "anxious", "overwhelmed","fear",
         "depression","lonely","suicidal","worthless", "disorder",
-        "eating", "self-harm", "regret", "homelessness", "harassment"
+        "self-harm", "regret", "homelessness", "harassment", "abuse"
         ]
 
     # this function goes through the post content and removes any punctuations which then converts to a list

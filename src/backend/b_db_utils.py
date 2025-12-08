@@ -168,3 +168,5 @@ def user_likes(post_id):
 
     # as the userlikes in SQL are a string, the data needs to be returned as a list
     return userlikes[0].split()
+
+

@@ -46,8 +46,8 @@ def like_entry(username, post_id):
 #--------------------------------------------------------------------------------------------                                   
 
 # this helper function assists in condensing the run function by printing out posts when the user
-# wants to 1) see our public feed; 2) see their own public and private posts; and 3) see a post they
-# have liked.
+# wants to 1) see our public feed and 2) see their profile, which deatures their own private and public 
+# posts.
 
 def print_helper_func(array, username=None, post_id = None):
     labs = ["\nPost ID: ", "Username: ", "Title: ", "Post: ", "Status: ", "Likes: ",
@@ -73,9 +73,9 @@ def print_helper_func(array, username=None, post_id = None):
         for i, j in list(zip(labels, iter_array)):
             print(i, j)
 
-# this helper function allows a user to decide if they want to like a post in their public feed. The like
-# is stored on SQL, as well as a list of users that have liked that pot already. If you have already
-# like a post, you will not be able to like it again.
+# this helper function allows a user to decide if they want to like a post in their public feed. The 
+# like is stored on SQL, as well as a list of users that have liked that post already. If you have 
+# already like a post, you will not be able to like it again.
 
 def like_helper_func(username):
     like_y_n = input("\nWould you like to like a post? Y or N: ").lower()
@@ -95,14 +95,14 @@ def like_helper_func(username):
                 for i, j in list(zip(labs, response)):
                     print(i, j)
 
-# this helper function produces hashtag recommendations by calling from f_class_hashtag_recs, it is incorporated
-# into the create_post function below.
+# this helper function produces hashtag recommendations by calling from f_class_hashtag_recs, it is 
+# incorporated into the create_post function below.
 
 def hashtag_generation(post):
     hashtag_recs = HashtagRecs()
 
-    # using the methods in the HashtagRecs class, we are now extract keywords from the user's post and
-    # converting those into a list of hashtags to reocmmend to the user
+    # using the methods in the HashtagRecs class, we are extracting keywords from the user's post and
+    # converting those into a list of hashtags to recommend to the user
     keywords = hashtag_recs.extract_keywords(post)
     hashtags = hashtag_recs.generate_hashtags(keywords)
 

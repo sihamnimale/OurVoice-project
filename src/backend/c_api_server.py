@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, request, redirect, url_for
 from b_db_utils import like_public_entry, see_public_feed, see_post_by_id, user_entry, user_specific_posts
 from support_hub_data import resources
+from wellness_resources import wellness_and_career_resources
+
 
 app = Flask(__name__)
 
@@ -31,7 +33,15 @@ def support_hub_resources():
         return jsonify(resources) # return resources dict as JSON
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
-        
+
+# provides access to our wellness and career hub
+@app.route('/wellness_career')
+def wellness_career_resources_route():
+    try:
+        # return wellness and career resources dict as JSON
+        return jsonify(wellness_and_career_resources)
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # route to handle creating a new public or private entry
 @app.route('/feed', methods=['POST'])

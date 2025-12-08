@@ -23,6 +23,12 @@ def get_support_hub():
     result = requests.get(url, headers={'content-type': 'application/json'})
     return result.json()
 
+# this function will provide user with a list of wellness and career resources
+def get_wellness_and_career_hub():
+    url = 'http://127.0.0.1:5000/wellness_career'
+    result = requests.get(url, headers={'content-type': 'application/json'})
+    return result.json()
+
 # this function will enable the user to add a like a public entry in their feed
 # and their username will also be added to the userlikes column on SQL and to the list of
 # userlikes, as produced by the user_likes function in DB_utils.
@@ -183,6 +189,37 @@ def support_hub_helper(categories):
                     print(f"    Website: {item['website']}")
                 print()
 
+# wellness and career hub helper
+def wellness_career_helper(categories):
+    if not categories:
+        print("\nWellness / Career Hub is currently unavailable.")
+    else:
+        print("\nChoose a Wellness / Career Category:")
+        for key, value in categories.items():
+            print(f"{key}. {value['category']}")
+
+        chosen_category = input("Enter the category number: ")
+
+        if chosen_category not in categories:
+            print("Invalid. Please select the category number from the list.")
+        else:
+            print(f"\n{categories[chosen_category]['category']}:\n")
+
+            for idx, item in enumerate(categories[chosen_category]["support"], start=1):
+                print(f"{idx:>2}. {item['name']}")
+
+                if "author" in item:
+                    print(f"    Author: {item['author']}")
+                if "description" in item:
+                    print(f"    Description: {item['description']}")
+                if "good_for" in item:
+                    print(f"    Good for: {', '.join(item['good_for'])}")
+
+                if "Description" in item:
+                    print(f"    Description: {item['Description']}")
+                if "website" in item:
+                    print(f"    Website: {item['website']}")
+                print()
 
 def run():
     """
@@ -249,9 +286,11 @@ def run():
                 print("\n--- Your previous posts ---")                
                 print_helper_func(posts, username=username)
 
-        # 5. See our Wellness and Career hub (not implemented yet)
+        # 5. See our Wellness and Career hub
         elif choice == "5":
-            print("\nThe Wellness / Career Hub has not been implemented yet.")
+            hub = get_wellness_and_career_hub()
+            categories = hub['categories']
+            wellness_career_helper(categories)
 
         # 6. Exit
         elif choice == "6":

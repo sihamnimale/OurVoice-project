@@ -71,7 +71,7 @@ def print_helper_func(array, username=None, post_id = None):
 # is stored on SQL, as well as a list of users that have liked that pot already. If you have already
 # like a post, you will not be able to like it again.
 
-def like_helper_func(array, username):
+def like_helper_func(username):
     like_y_n = input("\nWould you like to like a post? Y or N: ").lower()
     if like_y_n == "y":
         post_id = input("Please provide the post_id of the post you want to like: ")
@@ -83,7 +83,7 @@ def like_helper_func(array, username):
                 print("You have already liked this post.")
             else:
                 response = like_entry(username, post_id)
-                print(f"Thank you, {username}, for liking this post:\n") 
+                print(f"\nThank you, {username}, for liking this post:\n") 
                 labs = ["Post ID: ", "Username: ", "Title: ", "Post: ", "Status: ", "Likes: ",
                 "Userlikes: ", "Hashtags: "]
                 for i, j in list(zip(labs, response)):
@@ -109,22 +109,7 @@ def hashtag_generation(post):
     else:
         user_hashtags = ""
 
-    return user_hashtags
-
-# this helper function detects keywords that could indicate that support is needed by the user by calling from the 
-# e_class_keyword_detection
-
-def keyword_trigger(post):
-    detector = KeywordDetection()
-    support_triggered = detector.detect_keywords(post)
-    # checks if keyword is detected then a message pops up to redirect them to the support hub
-    if support_triggered:
-        print("\nIt sounds like you may be going through a difficult time.")
-        print("Please consider visiting our Support Hub.\n")
-        input("Press Enter to continue...\n")
-        return True
-    
-    return False        
+    return user_hashtags   
 
 # This function collects a user's journal entry from the terminal,
 # asks whether the entry should be public or private, and then sends
@@ -156,6 +141,21 @@ def create_post(username):
         print("RESPONSE:", response_data)
     
     return post_content
+
+# this helper function detects keywords that could indicate that support is needed by the user by calling from the 
+# e_class_keyword_detection
+
+def keyword_trigger(post):
+    detector = KeywordDetection()
+    support_triggered = detector.detect_keywords(post)
+    # checks if keyword is detected then a message pops up to redirect them to the support hub
+    if support_triggered:
+        print("\nIt sounds like you may be going through a difficult time.")
+        print("Please consider visiting our Support Hub.\n")
+        input("Press Enter to continue...\n")
+        return True
+    
+    return False     
 
 # support hub helper
 def support_hub_helper(categories):
@@ -217,7 +217,7 @@ def run():
             else:
                 print("\n--- Public Feed ---")
                 print_helper_func(posts)
-                like_helper_func(posts, username)
+                like_helper_func(username)
 
         # 2. Write a post (this uses your create_post function)
         elif choice == "2":

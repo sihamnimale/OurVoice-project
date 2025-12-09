@@ -84,6 +84,35 @@ def user_specific_posts(username):
         db_connection.close()
     return user_posts
 
+# function to obtain ONLY private posts from a specific user
+def user_private_posts(username):
+    """
+    Returns only private posts for a given username.
+    This can be used if you want a 'View only my private reflections' feature.
+    """
+    db_name = 'my_CFG_project_test_likes'
+    db_connection = _connect_to_db(db_name)
+    cur = db_connection.cursor()
+
+    db_connection.start_transaction()
+
+   # query to get only PRIVATE posts for this user
+    query = """
+        SELECT *
+        FROM posts_table
+        WHERE username = %s
+          AND private_public = 'private'
+        ORDER BY created_at DESC
+    """
+    cur.execute(query, (username,))
+    private_posts = cur.fetchall()
+
+    if db_connection:
+        cur.close()
+        db_connection.close()
+
+    return private_posts
+
 # function to add a new post into the SQL database
 def user_entry(entry_data, db_name="my_CFG_project_test_likes"):
     """

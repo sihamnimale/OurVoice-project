@@ -9,7 +9,9 @@ resources = {"categories": {
                         {"name": "Shout 85258 (24/7 Textline)", "Text": "SHOUT to 85258", "website": "https://giveusashout.org"},
                         {"name": "The Mix (Under 25s support)", "website": "https://www.themix.org.uk"},
                         {"name": "BEAT Eating Disorders (Body image + eating disorder support)", "website": "https://www.beateatingdisorders.org.uk"},
-                        {"name": "CALM – Campaign Against Living Miserably", "website": "https://www.thecalmzone.net"}
+                        {"name": "CALM – Campaign Against Living Miserably", "website": "https://www.thecalmzone.net"},
+                        {"name": "FRANK (UK Drug & Alcohol Advice)", "phone": "0300 123 6600", "website": "https://www.talktofrank.com"},
+                        {"name": "WithYou (Drug, Alcohol & Mental Health Support)", "website": "https://www.wearewithyou.org.uk"}
             ]
         },
         "2": {

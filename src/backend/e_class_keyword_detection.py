@@ -1,12 +1,13 @@
 import string
 
 class KeywordDetection:
-    # list predefined keywords to trigger our support hub 
+    # high-risk/crisis-focused words to trigger to our support hub 
     def __init__(self):
         self.keywords = [
-        "anxiety","panic","unease", "anxious", "overwhelmed","fear",
-        "depression","lonely","suicidal","worthless", "disorder",
-        "self-harm", "regret", "homelessness", "harassment", "abuse"
+        "abortion", "abus", "anorexi", "anxiet", "addict", "assault", "beat", "bulimia", "crisis", "debt", "depress", 
+        "discriminat", "disorder", "die", "evict", "forced", "guilt", "harass", "homeless", "hopeless", "infertil",  
+        "kill", "miscarriage", "numb", "panic", "rape", "regret", "selfharm", "starv", "suicid", "unemploye", 
+        "unsafe", "violen"
         ]
 
     # this function goes through the post content and removes any punctuations which then converts to a list
@@ -21,9 +22,10 @@ class KeywordDetection:
         words = content.split()
 
         # check for any matching keywords
-        for keyword in self.keywords:
-            if keyword in words:
-                return True
+        for word in words:
+            for keyword in self.keywords:
+                if word.startswith(keyword):
+                    return True
             
         return False
     

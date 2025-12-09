@@ -156,9 +156,8 @@ def keyword_trigger(post):
     support_triggered = detector.detect_keywords(post)
     # checks if keyword is detected then a message pops up to redirect them to the support hub
     if support_triggered:
-        print("\nIt sounds like you may be going through a difficult time.")
-        print("Please consider visiting our Support Hub.\n")
-        input("Press Enter to continue...\n")
+        print("\nSome topics in your post are commonly linked to wellbeing and support.")
+        print("If you feel it could be helpful, please consider visiting our Support Hub.\n")
         return True
     
     return False     
@@ -262,9 +261,15 @@ def run():
         
             # if keyword is detected for support then redirect to support hub
             if keyword_trigger(post_content):
-                hub = get_support_hub()
-                categories = hub['categories']
-                support_hub_helper(categories)
+                user_choice = input("Would you like to visit our support hub now? (y/n) ")
+                
+                if user_choice == "y":
+                    hub = get_support_hub()
+                    categories = hub['categories']
+                    support_hub_helper(categories)
+                else:
+                    affirmation = Affirmations()    
+                    print(f"\nHere is your personalised affirmation: {affirmation.personalised_affirmation(post_content)}")
             else:
                 # affirmations
                 affirmation = Affirmations()    

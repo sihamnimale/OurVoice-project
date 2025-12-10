@@ -115,7 +115,7 @@ def hashtag_generation(post):
     else:
         user_hashtags = ""
 
-    return user_hashtags   
+    return user_hashtags  
 
 # This function collects a user's journal entry from the terminal,
 # asks whether the entry should be public or private, and then sends
@@ -147,6 +147,12 @@ def create_post(username):
         print("RESPONSE:", response_data)
     
     return post_content
+
+# affirmations helper function
+
+def affirmations_helper(post_content):
+    affirmation = Affirmations()    
+    print(f"\nHere is your personalised affirmation: {affirmation.personalised_affirmation(post_content)}")
 
 # this helper function detects keywords that could indicate that support is needed by the user by calling from the 
 # e_class_keyword_detection
@@ -187,6 +193,11 @@ def support_hub_helper(categories):
                 if "website" in item:
                     print(f"    Website: {item['website']}")
                 print()
+
+def support_hub_helper_call():
+    hub = get_support_hub()
+    categories = hub['categories']
+    return support_hub_helper(categories)
 
 # wellness and career hub helper
 def wellness_career_helper(categories):
@@ -264,22 +275,16 @@ def run():
                 user_choice = input("Would you like to visit our support hub now? (y/n) ")
                 
                 if user_choice == "y":
-                    hub = get_support_hub()
-                    categories = hub['categories']
-                    support_hub_helper(categories)
+                    support_hub_helper_call()
                 else:
-                    affirmation = Affirmations()    
-                    print(f"\nHere is your personalised affirmation: {affirmation.personalised_affirmation(post_content)}")
+                    affirmations_helper(post_content)
             else:
                 # affirmations
-                affirmation = Affirmations()    
-                print(f"\nHere is your personalised affirmation: {affirmation.personalised_affirmation(post_content)}")
+                affirmations_helper(post_content)
                 
         # 3. See our support hub
         elif choice == "3":
-            hub = get_support_hub()
-            categories = hub['categories']
-            support_hub_helper(categories)
+            support_hub_helper_call()
             
         # 4. Review your previous posts
         elif choice == "4":

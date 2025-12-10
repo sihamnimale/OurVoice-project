@@ -19,5 +19,6 @@ class HashtagRecs:
     
     # this function takes the keywords and puts them into the class's one atrribute, which is a list called hashtags
     def generate_hashtags(self, keywords):
-        self.hashtags = ['#' + keyword.lower() for keyword in keywords]
+        hashtags = ['#' + keyword.lower() for keyword in keywords]
+        self.hashtags = list(set(hashtags))
         return self.hashtags

@@ -7,25 +7,25 @@ from g_class_affirmations import Affirmations
 
 # this function will enable the user to see all public posts via the Flask interface
 def get_public_feed():
-    url = 'http://127.0.0.1:5000/feed'
+    url = 'http://127.0.0.1:5001/feed'
     result = requests.get(url, headers={'content-type': 'application/json'})
     return result.json()
 
 # this function will provide a json of all public and private entries that user has input
 def get_username_entries(username):
-    url = f'http://127.0.0.1:5000/{username}'
+    url = f'http://127.0.0.1:5001/{username}'
     result = requests.get(url, headers={'content-type': 'application/json'})
     return result.json()
 
 # this function will provide user with a list of support resources
 def get_support_hub():
-    url = 'http://127.0.0.1:5000/support_hub'
+    url = 'http://127.0.0.1:5001/support_hub'
     result = requests.get(url, headers={'content-type': 'application/json'})
     return result.json()
 
 # this function will provide user with a list of wellness and career resources
 def get_wellness_and_career_hub():
-    url = 'http://127.0.0.1:5000/wellness_career'
+    url = 'http://127.0.0.1:5001/wellness_career'
     result = requests.get(url, headers={'content-type': 'application/json'})
     return result.json()
 
@@ -33,7 +33,7 @@ def get_wellness_and_career_hub():
 # and their username will also be added to the userlikes column on SQL and to the list of
 # userlikes, as produced by the user_likes function in DB_utils.
 def like_entry(username, post_id):
-    url = f'http://127.0.0.1:5000/feed/{post_id}'
+    url = f'http://127.0.0.1:5001/feed/{post_id}'
     result = requests.post(
         url, json={"userlike": username},
         headers={'content-type': 'application/json'})
@@ -134,7 +134,7 @@ def create_post(username):
     entry_data = {"name": username, "title": title, "post": post_content,"private_public": private_public,
                   "hashtags": user_hashtags}
 
-    url = "http://127.0.0.1:5000/feed"
+    url = "http://127.0.0.1:5001/feed"
     result = requests.post(url, json=entry_data, headers={"content-type": "application/json"})
     response_data = result.json()
 

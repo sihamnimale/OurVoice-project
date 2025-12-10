@@ -222,3 +222,35 @@ def user_likes(post_id):
 
     # as the userlikes in SQL are a string, the data needs to be returned as a list
     return userlikes[0].split()
+
+#----------------------------------------------------------------------------
+#                       POSTING AFFRIMATIONS TO THE DATABASE:
+#----------------------------------------------------------------------------
+# Function inserting a new row into the SQL DB that invludes an affirmation.
+# This is necessary for us to store the affirmations given to the clients.
+
+def insert_post_with_affirmation(affirmation, name=None, title=None, content=None,
+                                 private_public="private", hashtags="", db_name="my_CFG_project_test_likes"):
+    conn = None
+    try:
+        conn = _connect_to_db(db_name)
+        cur = conn.cursor()
+        # this query posts affirmations into the databse.
+        sql = """
+            INSERT INTO posts_table
+            (name, title, post, private_public, likes, userlikes, hashtags, affirmation)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        """
+        values = (name, title, content, private_public, 0, "", hashtags, affirmation)
+        cur.execute(sql, values)
+        conn.commit()
+        new_id = cur.lastrowid
+        cur.close()
+        return new_id
+    except Exception as e:
+        if conn:
+            conn.rollback()
+        raise
+    finally:
+        if conn:
+            conn.close()

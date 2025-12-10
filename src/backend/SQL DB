@@ -20,6 +20,7 @@ CREATE TABLE journal_entries (
     private_public VARCHAR(20) NOT NULL,         
     likes INTEGER NOT NULL DEFAULT 0,            
     user_likes VARCHAR(250) DEFAULT "",          
-    hashtags TEXT,                                
+    hashtags TEXT, 
+    affirmation TEXT, 
     FOREIGN KEY (username) REFERENCES users(username)
 ); 

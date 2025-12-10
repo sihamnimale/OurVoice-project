@@ -1,19 +1,25 @@
-DROP DATABASE IF EXISTS my_CFG_project_test_likes;
-CREATE DATABASE my_CFG_project_test_likes;
-USE my_CFG_project_test_likes;
+DROP DATABASE IF EXISTS my_CFG_project;
+CREATE DATABASE my_CFG_project;
+USE my_CFG_project;
 
-CREATE TABLE posts_table (
-	post_id INTEGER AUTO_INCREMENT PRIMARY KEY, 
-    name VARCHAR(50),
-    post VARCHAR(50),
-    private_public VARCHAR(20),
-    likes INTEGER,
-    userlikes VARCHAR(250)
+# USERS TABLE. Stores basic info about each user, needed to link journal entries to people
+	
+CREATE TABLE users (
+    user_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO posts_table 
-(post_id, name, post, private_public, likes, userlikes)
-VALUES
-(1, "test", "test", "public", 0, "");
+# JOURNAL ENTRIES TABLE. Stores entries written by users (core of the app)
 
-SELECT * FROM posts_table;
+CREATE TABLE journal_entries (
+    post_id INTEGER PRIMARY KEY AUTO_INCREMENT,   
+    username TEXT NOT NULL,                      
+    title TEXT,                                  
+    post TEXT NOT NULL,                          
+    private_public VARCHAR(20) NOT NULL,         
+    likes INTEGER NOT NULL DEFAULT 0,            
+    user_likes VARCHAR(250) DEFAULT "",          
+    hashtags TEXT,                                
+    FOREIGN KEY (username) REFERENCES users(username)
+); 

@@ -118,7 +118,7 @@ def hashtag_generation(post):
         hashtags_q = input("Invalid input. Please enter Y or N: ").lower()
 
     if hashtags_q == "y":
-        print(f"\nHere are some hashtags I can recommend: {hashtags}")
+        print(f"\nHere are some hashtags I can recommend: #{hashtags}")
         user_hashtags = input("\nYour hashtags: ")
     else:
         user_hashtags = ""
@@ -189,7 +189,7 @@ def create_post(username):
 def affirmations_helper(post_content, post_id=None, username=None):
     affirmation = Affirmations()
     text = affirmation.personalised_affirmation(post_content)
-    print(f"\nHere is your personalised affirmation:{text}")
+    print(f"\nHere is your personalised affirmation: {text}")
     return text
     # resp = post_affirmation_to_post(post_id, text)
 

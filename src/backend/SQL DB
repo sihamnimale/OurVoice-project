@@ -6,7 +6,7 @@ USE my_CFG_project;
 	
 CREATE TABLE users (
     user_id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    username TEXT NOT NULL UNIQUE,
+    username VARCHAR(250) NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -14,7 +14,7 @@ CREATE TABLE users (
 
 CREATE TABLE journal_entries (
     post_id INTEGER PRIMARY KEY AUTO_INCREMENT,   
-    username TEXT NOT NULL,                      
+    username VARCHAR(250) NOT NULL,                      
     title TEXT,                                  
     post TEXT NOT NULL,                          
     private_public VARCHAR(20) NOT NULL,         

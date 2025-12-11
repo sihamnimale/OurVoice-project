@@ -1,6 +1,6 @@
 import requests
 import itertools
-from b_db_utils import user_likes
+from b_db_utils import username_entry, user_likes, attach_affirmation_to_post
 from e_class_keyword_detection import KeywordDetection
 from f_class_hashtag_recs import HashtagRecs
 from g_class_affirmations import Affirmations
@@ -144,23 +144,42 @@ def create_post(username):
 
     url = "http://127.0.0.1:5001/feed"
     result = requests.post(url, json=entry_data, headers={"content-type": "application/json"})
-    response_data = result.json()
+    response_data = {}
+    try:
+        response_data = result.json()
+    except Exception:
+        response_data = {}
 
     if result.status_code == 201:
-        print("\nYour post has been created successfully!")
-        
+        post_id = response_data["post_id"]
+
+        # Generate affirmation
+        affirmation = Affirmations()    
+        aff_text = affirmation.personalised_affirmation(post_content)
+
+        # Attach to DB
+        attach_affirmation_to_post(post_id, aff_text)
+
+        print("\nYour post and affirmation have been saved!")
     else:
         print("\nSomething went wrong, please try again.")
         print("STATUS CODE:", result.status_code)
         print("RESPONSE:", response_data)
-    
-    return post_content
+        new_post_id = None
+
+    return post_content, new_post_id
 
 # affirmations helper function
 
-def affirmations_helper(post_content):
-    affirmation = Affirmations()    
-    print(f"\nHere is your personalised affirmation: {affirmation.personalised_affirmation(post_content)}")
+def affirmations_helper(post_content, post_id=None, username=None):
+    affirmation_obj = Affirmations()
+    text = affirmation_obj.personalised_affirmation(post_content)
+
+    # show to user
+    print(f"\nHere is your personalised affirmation:\n{text}\n")
+
+    resp = post_affirmation_to_post(post_id, text)
+    print("Affirmation saved to your post.")
 
 # this helper function detects keywords that could indicate that support is needed by the user by calling from the 
 # e_class_keyword_detection
@@ -240,6 +259,18 @@ def wellness_career_helper(categories):
                     print(f"    Website: {item['website']}")
                 print()
 
+
+# attaching an affirmation to an existing post
+def post_affirmation_to_post(post_id, affirmation):
+    
+    url = f"http://127.0.0.1:5001/feed/{post_id}/affirmation"
+    try:
+        resp = requests.put(url, json={"affirmation": affirmation},
+                            headers={"content-type": "application/json"})
+        return resp.json() if resp.text else {"status": resp.status_code}
+    except Exception as e:
+        return {"error": str(e)}
+
 def run():
     """
     Main clientside function:
@@ -285,9 +316,12 @@ def run():
 
         # 2. Write a post (this uses your create_post function)
         elif choice == "2":
-            post_content = create_post(username)
-        
-            # if keyword is detected for support then redirect to support hub
+            post_content, post_id = create_post(username)
+
+            if not post_content:
+                print("No post created — skipping affirmation.")
+                continue
+
             if keyword_trigger(post_content):
                 user_choice = input("Would you like to visit our support hub now? (y/n) ")
                 
@@ -297,10 +331,9 @@ def run():
                 if user_choice == "y":
                     support_hub_helper_call()
                 else:
-                    affirmations_helper(post_content)
+                    affirmations_helper(post_content, post_id=post_id, username=username)
             else:
-                # affirmations
-                affirmations_helper(post_content)
+                affirmations_helper(post_content, post_id=post_id, username=username)
                 
         # 3. See our support hub
         elif choice == "3":

@@ -252,35 +252,26 @@ def user_likes(post_id):
 # Function inserting a new row into the SQL DB that includes an affirmation.
 # This is necessary for us to store the affirmations given to the clients.
 
-def insert_post_with_affirmation(
-    affirmation,
-    name=None,
-    title=None,
-    content=None,
-    private_public="private",
-    hashtags="",
-    db_name="my_CFG_project"
-):
+def attach_affirmation_to_post(post_id, affirmation, db_name="my_CFG_project_test_likes"):
+    
     conn = None
     try:
         conn = _connect_to_db(db_name)
         cur = conn.cursor()
-        # this query posts affirmations into the database.
-        sql = """
-            INSERT INTO journal_entries
-            (username, title, post, private_public, likes, user_likes, hashtags, affirmation)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-        """
-        values = (name, title, content, private_public, 0, "", hashtags, affirmation)
-        cur.execute(sql, values)
+
+        sql = "UPDATE posts_table SET affirmation = %s WHERE post_id = %s"
+        cur.execute(sql, (affirmation, post_id))
         conn.commit()
-        new_id = cur.lastrowid
+
         cur.close()
-        return new_id
+        return True
+
     except Exception as e:
         if conn:
             conn.rollback()
-        raise
+        print("Error attaching affirmation:", e)
+        return False
+
     finally:
         if conn:
             conn.close()

@@ -1,5 +1,5 @@
 import mysql.connector
-from a_config import USER, PASSWORD, HOST
+from backend.a_config import USER, PASSWORD, HOST
 
 #----------------------------------------------------------------------------
 #                      CUSTOM EXCEPTIONS:

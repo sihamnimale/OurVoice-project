@@ -24,3 +24,5 @@ CREATE TABLE journal_entries (
     affirmation TEXT, 
     FOREIGN KEY (username) REFERENCES users(username)
 ); 
+
+ALTER TABLE journal_entries AUTO_INCREMENT = 1;

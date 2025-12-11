@@ -165,11 +165,6 @@ def create_post(username):
         if result and result.status_code == 201:
             new_post_id = response_data.get("post_id")
 
-        # Generate and attach affirmation
-            # affirmation_obj = Affirmations()
-            # aff_text = affirmation_obj.personalised_affirmation(post_content)
-            # attach_affirmation_to_post(new_post_id, aff_text)
-
         else:
             print("\nSomething went wrong, please try again.")
             if result:
@@ -178,8 +173,6 @@ def create_post(username):
 
     except Exception as e:
         print(f"Error attaching affirmation: {e}")
-
-        # print("\nYour post and affirmation have been saved!")
     
     return post_content, new_post_id
 
@@ -272,17 +265,6 @@ def wellness_career_helper(categories):
                 print()
 
 
-# attaching an affirmation to an existing post
-# def post_affirmation_to_post(post_id, affirmation):
-    
-#     url = f"http://127.0.0.1:5001/feed/{post_id}/affirmation"
-#     try:
-#         resp = requests.put(url, json={"affirmation": affirmation},
-#                             headers={"content-type": "application/json"})
-#         return resp.json() if resp.text else {"status": resp.status_code}
-#     except Exception as e:
-#         return {"error": str(e)}
-
 
 def run():
     """
@@ -344,8 +326,8 @@ def run():
                 if user_choice == "y":
                     support_hub_helper_call()
                 else:
-                    affirmations_helper(post_content, post_id=post_id, username=username)
-                    attach_affirmation_to_post(post_id, post_content)
+                    affirm = affirmations_helper(post_content, post_id=post_id, username=username)
+                    attach_affirmation_to_post(post_id, affirm)
             else:
                 affirm = affirmations_helper(post_content, post_id=post_id, username=username)
                 attach_affirmation_to_post(post_id, affirm)

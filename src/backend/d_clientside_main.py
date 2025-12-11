@@ -189,8 +189,8 @@ def create_post(username):
 def affirmations_helper(post_content, post_id=None, username=None):
     affirmation = Affirmations()
     text = affirmation.personalised_affirmation(post_content)
-
     print(f"\nHere is your personalised affirmation:{text}")
+    return text
     # resp = post_affirmation_to_post(post_id, text)
 
 # this helper function detects keywords that could indicate that support is needed by the user by calling from the 
@@ -347,8 +347,8 @@ def run():
                     affirmations_helper(post_content, post_id=post_id, username=username)
                     attach_affirmation_to_post(post_id, post_content)
             else:
-                affirmations_helper(post_content, post_id=post_id, username=username)
-                attach_affirmation_to_post(post_id, post_content)
+                affirm = affirmations_helper(post_content, post_id=post_id, username=username)
+                attach_affirmation_to_post(post_id, affirm)
                 
         # 3. See our support hub
         elif choice == "3":

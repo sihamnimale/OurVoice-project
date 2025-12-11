@@ -3,6 +3,7 @@ from backend.e_class_keyword_detection import KeywordDetection
 
 # Testing the keyword detection function to correctly detect serious keywords in a user's post entry
 # so support can be suggested when needed
+
 class TestKeywordDetection(TestCase):
 
     def setUp(self):
@@ -25,4 +26,3 @@ class TestKeywordDetection(TestCase):
     def test_does_not_trigger_on_financial_goal(self):
         content = "I want to start investing but I’m scared of getting it wrong."
         self.assertFalse(self.detector.detect_keywords(content))
-    

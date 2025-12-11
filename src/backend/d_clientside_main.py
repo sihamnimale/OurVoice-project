@@ -1,9 +1,10 @@
 import requests
 import itertools
-from b_db_utils import user_likes
+from b_db_utils import username_entry, user_likes
 from e_class_keyword_detection import KeywordDetection
 from f_class_hashtag_recs import HashtagRecs
 from g_class_affirmations import Affirmations
+from welcome_message import welcome_message
 
 # this function will enable the user to see all public posts via the Flask interface
 def get_public_feed():
@@ -238,22 +239,28 @@ def run():
     - shows a menu (see feed / write post / support hub / review entries / wellness/career hub / exit)
     - calls helper functions to talk to the Flask API
     """
-    print("Welcome to OurVoice, share a story, uplift others, journal privately and access our support hub.")
+    # print("Welcome to OurVoice, share a story, uplift others, journal privately and access our support hub.")
+    print(welcome_message)
     username = input("Please enter your username: ").strip()
+    # CALLING FUNCTION TO ADD USER TO SQL DATABASE, NOT INTEGRATED YET AS NEED TO
+    # PREVENT DUPLICATION OF USERNAMES BEING INPUT INTO THE DB
+
+    # entry_data = {"username": username}
+    # username_entry(entry_data)
 
     while not username:
         username = input("Username cannot be empty. Please enter your username: ").strip()
 
     while True:
-        print("\nWhat would you like to do next?")
-        print("1. See our feed")
+        print("\nHow do you want to move today?")
+        print("\n1. See our feed")
         print("2. Write a post (public/private)")
         print("3. See our support hub")
-        print("4. Review your previous posts")
-        print("5. Wellness / Career Hub")
+        print("4. Review your profile")
+        print("5. See our Wellness / Career Hub")
         print("6. Exit")
 
-        choice = input("Enter 1–6: ").strip()
+        choice = input("\nEnter 1–6: ").strip()
 
         # 1. See our feed + like a post
         if choice == "1":

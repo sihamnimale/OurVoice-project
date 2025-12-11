@@ -27,6 +27,25 @@ def _connect_to_db(db_name):
     except Exception:
         raise DbConnectionError("Database connection failed.")
 
+
+# INSERTING NEW USERS INTO THE USER TABLE IN THE DATABASE
+def username_entry(entry_data):
+    db_name="my_CFG_project"
+    connection = _connect_to_db(db_name)
+    cursor = connection.cursor()
+
+    sql = """
+            INSERT INTO users (username)
+            VALUES (%s)
+        """
+    values = (entry_data["username"],)
+
+    cursor.execute(sql, values)
+    connection.commit()
+    cursor.close()
+    connection.close()
+
+
 #----------------------------------------------------------------------------
 #                  FETCHING POSTS FROM THE DATABASE:
 #----------------------------------------------------------------------------
@@ -47,9 +66,6 @@ def see_public_feed():
                WHERE private_public = 'public'"""
     cur.execute(query)
     posts = cur.fetchall()
-
-    for post in posts:
-        print(post)
 
     if db_connection:
         db_connection.close()

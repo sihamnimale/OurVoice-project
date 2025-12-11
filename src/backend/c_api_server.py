@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request, redirect, url_for
 from b_db_utils import like_public_entry, see_public_feed, see_post_by_id, user_entry, user_specific_posts
 from support_hub_data import resources
 from wellness_resources import wellness_and_career_resources
-
+from welcome_message import welcome_message
 
 app = Flask(__name__)
 
@@ -53,7 +53,7 @@ database communication and user interactions within OurVoice.
 # A welcoming message to the user.
 @app.route('/welcome')
 def welcome():
-    return "[welcome message]"
+    return welcome_message
 
 #----------------------------------------------------------------------------
 #                     PUBLIC FEED ROUTE (GET)
@@ -82,7 +82,6 @@ def username_entries(username):
     try:
         # User_specific_posts function from db_utils.
         entries_by_username = user_specific_posts(username)
-        print(entries_by_username)
         return jsonify(entries_by_username)
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500

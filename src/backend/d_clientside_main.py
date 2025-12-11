@@ -1,9 +1,9 @@
 import requests
 import itertools
-from b_db_utils import user_likes
-from e_class_keyword_detection import KeywordDetection
-from f_class_hashtag_recs import HashtagRecs
-from g_class_affirmations import Affirmations
+from backend.b_db_utils import user_likes
+from backend.e_class_keyword_detection import KeywordDetection
+from backend.f_class_hashtag_recs import HashtagRecs
+from backend.g_class_affirmations import Affirmations
 
 # this function will enable the user to see all public posts via the Flask interface
 def get_public_feed():

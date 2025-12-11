@@ -1,6 +1,6 @@
 import requests
 import itertools
-from b_db_utils import username_entry, user_likes, attach_affirmation_to_post
+from b_db_utils import username_entry, get_usernames, user_likes, attach_affirmation_to_post
 from e_class_keyword_detection import KeywordDetection
 from f_class_hashtag_recs import HashtagRecs
 from g_class_affirmations import Affirmations
@@ -52,7 +52,7 @@ def like_entry(username, post_id):
 
 def print_helper_func(array, username=None, post_id = None):
     labs = ["\nPost ID: ", "Username: ", "Title: ", "Post: ", "Status: ", "Likes: ",
-            "Userlikes: ", "Hashtags: "]
+            "Userlikes: ", "Hashtags: ", "Affirmation:"]
 
     # this if statement triggers when username and post_id are not set, i.e. when the user has opted to
     # see our public feed.
@@ -134,52 +134,64 @@ def hashtag_generation(post):
 def create_post(username):
     print("\nCreate a New Post")
 
+    # Get user input
     title = input("\nTitle of your entry: ")
     post_content = input("\nWrite your entry:\n> ")
     private_public = input("\nMake this public or private? ").lower()
-    user_hashtags = hashtag_generation(post_content) # calling the hashtags function above
+    while private_public not in ["public", "private"]:
+        private_public = input("Invalid input. Please enter 'public' or 'private': ").lower()
+    user_hashtags = hashtag_generation(post_content)  # calling the hashtag function above
 
-    entry_data = {"name": username, "title": title, "post": post_content,"private_public": private_public,
-                  "hashtags": user_hashtags}
+    # Prepare data to send to the API
+    entry_data = {
+        "username": username,
+        "title": title,
+        "post": post_content,
+        "private_public": private_public,
+        "hashtags": user_hashtags
+    }
 
     url = "http://127.0.0.1:5001/feed"
-    result = requests.post(url, json=entry_data, headers={"content-type": "application/json"})
-    response_data = {}
+
     try:
+        result = requests.post(url, json=entry_data, headers={"content-type": "application/json"})
         response_data = result.json()
     except Exception:
         response_data = {}
+        result = None
 
-    if result.status_code == 201:
-        post_id = response_data["post_id"]
+    new_post_id = None
+    try:
+        if result and result.status_code == 201:
+            new_post_id = response_data.get("post_id")
 
-        # Generate affirmation
-        affirmation = Affirmations()    
-        aff_text = affirmation.personalised_affirmation(post_content)
+        # Generate and attach affirmation
+            # affirmation_obj = Affirmations()
+            # aff_text = affirmation_obj.personalised_affirmation(post_content)
+            # attach_affirmation_to_post(new_post_id, aff_text)
 
-        # Attach to DB
-        attach_affirmation_to_post(post_id, aff_text)
+        else:
+            print("\nSomething went wrong, please try again.")
+            if result:
+                print("STATUS CODE:", result.status_code)
+            print("RESPONSE:", response_data)
 
-        print("\nYour post and affirmation have been saved!")
-    else:
-        print("\nSomething went wrong, please try again.")
-        print("STATUS CODE:", result.status_code)
-        print("RESPONSE:", response_data)
-        new_post_id = None
+    except Exception as e:
+        print(f"Error attaching affirmation: {e}")
 
+        # print("\nYour post and affirmation have been saved!")
+    
     return post_content, new_post_id
+
 
 # affirmations helper function
 
 def affirmations_helper(post_content, post_id=None, username=None):
-    affirmation_obj = Affirmations()
-    text = affirmation_obj.personalised_affirmation(post_content)
+    affirmation = Affirmations()
+    text = affirmation.personalised_affirmation(post_content)
 
-    # show to user
-    print(f"\nHere is your personalised affirmation:\n{text}\n")
-
-    resp = post_affirmation_to_post(post_id, text)
-    print("Affirmation saved to your post.")
+    print(f"\nHere is your personalised affirmation:{text}")
+    # resp = post_affirmation_to_post(post_id, text)
 
 # this helper function detects keywords that could indicate that support is needed by the user by calling from the 
 # e_class_keyword_detection
@@ -261,15 +273,16 @@ def wellness_career_helper(categories):
 
 
 # attaching an affirmation to an existing post
-def post_affirmation_to_post(post_id, affirmation):
+# def post_affirmation_to_post(post_id, affirmation):
     
-    url = f"http://127.0.0.1:5001/feed/{post_id}/affirmation"
-    try:
-        resp = requests.put(url, json={"affirmation": affirmation},
-                            headers={"content-type": "application/json"})
-        return resp.json() if resp.text else {"status": resp.status_code}
-    except Exception as e:
-        return {"error": str(e)}
+#     url = f"http://127.0.0.1:5001/feed/{post_id}/affirmation"
+#     try:
+#         resp = requests.put(url, json={"affirmation": affirmation},
+#                             headers={"content-type": "application/json"})
+#         return resp.json() if resp.text else {"status": resp.status_code}
+#     except Exception as e:
+#         return {"error": str(e)}
+
 
 def run():
     """
@@ -280,11 +293,11 @@ def run():
     """
     print(welcome_message)
     username = input("Please enter your username: ").strip()
-    # CALLING FUNCTION TO ADD USER TO SQL DATABASE, NOT INTEGRATED YET AS NEED TO
-    # PREVENT DUPLICATION OF USERNAMES BEING INPUT INTO THE DB
 
-    # entry_data = {"username": username}
-    # username_entry(entry_data)
+    list_of_users = get_usernames()
+    if username not in list_of_users:
+        entry_data = {"username": username}
+        username_entry(entry_data)
 
     while not username:
         username = input("Username cannot be empty. Please enter your username: ").strip()
@@ -332,8 +345,10 @@ def run():
                     support_hub_helper_call()
                 else:
                     affirmations_helper(post_content, post_id=post_id, username=username)
+                    attach_affirmation_to_post(post_id, post_content)
             else:
                 affirmations_helper(post_content, post_id=post_id, username=username)
+                attach_affirmation_to_post(post_id, post_content)
                 
         # 3. See our support hub
         elif choice == "3":

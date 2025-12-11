@@ -41,7 +41,7 @@ PSEUDO CODE FOR THE AFFIRMATION API:
 
 API_HOST = "affirmations-api-by-apirobots.p.rapidapi.com"
 BASE_URL = "https://affirmations-api-by-apirobots.p.rapidapi.com/v1/affirmations/categories"
-RAPIDAPI_KEY = "b21a953101msh7445d792fd7914bp108e8ejsnea5d5fa417ba"
+RAPIDAPI_KEY = "b21af6861a6851msh4a539514036d796p13f225jsn55c3f8caa100"
 
 headers = {
     "x-rapidapi-key": RAPIDAPI_KEY,

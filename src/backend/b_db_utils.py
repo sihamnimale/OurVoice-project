@@ -45,6 +45,26 @@ def username_entry(entry_data):
     cursor.close()
     connection.close()
 
+#RETRIEVING THE USERS FROM THE USER TABLE IN THE DATABASE
+def get_usernames():
+    db_name="my_CFG_project"
+    connection = _connect_to_db(db_name)
+    cursor = connection.cursor()
+
+    sql = """
+            SELECT username FROM users
+        """
+
+    cursor.execute(sql)
+    usernames = cursor.fetchall()
+    cursor.close()
+    connection.close()
+
+    for user in usernames:
+        usernames = [username[0] for username in usernames]
+
+    return usernames
+
 
 #----------------------------------------------------------------------------
 #                  FETCHING POSTS FROM THE DATABASE:
@@ -159,7 +179,7 @@ def user_entry(entry_data, db_name="my_CFG_project"):
         VALUES (%s, %s, %s, %s, %s, %s, %s)
     """
     values = (
-        entry_data["name"],          # maps to username column
+        entry_data["username"],          # maps to username column
         entry_data["title"],
         entry_data["post"],
         entry_data["private_public"],
@@ -252,14 +272,14 @@ def user_likes(post_id):
 # Function inserting a new row into the SQL DB that includes an affirmation.
 # This is necessary for us to store the affirmations given to the clients.
 
-def attach_affirmation_to_post(post_id, affirmation, db_name="my_CFG_project_test_likes"):
+def attach_affirmation_to_post(post_id, affirmation, db_name="my_CFG_project"):
     
     conn = None
     try:
         conn = _connect_to_db(db_name)
         cur = conn.cursor()
 
-        sql = "UPDATE posts_table SET affirmation = %s WHERE post_id = %s"
+        sql = "UPDATE journal_entries SET affirmation = %s WHERE post_id = %s"
         cur.execute(sql, (affirmation, post_id))
         conn.commit()
 

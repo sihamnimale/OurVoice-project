@@ -1,6 +1,6 @@
 import requests
 import itertools
-from b_db_utils import username_entry, user_likes
+from b_db_utils import user_likes
 from e_class_keyword_detection import KeywordDetection
 from f_class_hashtag_recs import HashtagRecs
 from g_class_affirmations import Affirmations
@@ -80,6 +80,10 @@ def print_helper_func(array, username=None, post_id = None):
 
 def like_helper_func(username):
     like_y_n = input("\nWould you like to like a post? Y or N: ").lower()
+    
+    while like_y_n not in ["y", "n"]:
+        like_y_n = input("Invalid input. Please enter Y or N: ").lower()
+    
     if like_y_n == "y":
         post_id = input("Please provide the post_id of the post you want to like: ")
         if not post_id.isdigit():
@@ -109,6 +113,9 @@ def hashtag_generation(post):
 
     hashtags_q = input(f"\nThank you so much for sharing!"
                        f"\nWould you like to include some hashtags (Y/N)? ").lower()
+    
+    while hashtags_q not in ["y", "n"]:
+        hashtags_q = input("Invalid input. Please enter Y or N: ").lower()
 
     if hashtags_q == "y":
         print(f"\nHere are some hashtags I can recommend: {hashtags}")
@@ -179,9 +186,10 @@ def support_hub_helper(categories):
             print(f"{key}. {value['category']}")
 
         chosen_category = input("Enter the category number: ")
-        if chosen_category not in categories:
-            print("Invalid. Please select the category number from the list.")
-        else:
+        while chosen_category not in categories:
+            chosen_category = input("Invalid. Please select the category number from the list: ")   
+        
+        if chosen_category in categories:
             print(f"\n{categories[chosen_category]['category']}:\n")
 
             for idx, item in enumerate(categories[chosen_category]["support"], start=1):
@@ -210,10 +218,10 @@ def wellness_career_helper(categories):
             print(f"{key}. {value['category']}")
 
         chosen_category = input("Enter the category number: ")
-
-        if chosen_category not in categories:
-            print("Invalid. Please select the category number from the list.")
-        else:
+        while chosen_category not in categories:
+            chosen_category = input("Invalid. Please select the category number from the list: ")   
+        
+        if chosen_category in categories:
             print(f"\n{categories[chosen_category]['category']}:\n")
 
             for idx, item in enumerate(categories[chosen_category]["support"], start=1):
@@ -239,7 +247,6 @@ def run():
     - shows a menu (see feed / write post / support hub / review entries / wellness/career hub / exit)
     - calls helper functions to talk to the Flask API
     """
-    # print("Welcome to OurVoice, share a story, uplift others, journal privately and access our support hub.")
     print(welcome_message)
     username = input("Please enter your username: ").strip()
     # CALLING FUNCTION TO ADD USER TO SQL DATABASE, NOT INTEGRATED YET AS NEED TO
@@ -262,6 +269,9 @@ def run():
 
         choice = input("\nEnter 1–6: ").strip()
 
+        while choice not in ["1", "2", "3", "4", "5", "6"]:
+            choice = input("Invalid input. Please enter a number between 1 and 6: ").strip()
+
         # 1. See our feed + like a post
         if choice == "1":
             posts = get_public_feed()
@@ -280,6 +290,9 @@ def run():
             # if keyword is detected for support then redirect to support hub
             if keyword_trigger(post_content):
                 user_choice = input("Would you like to visit our support hub now? (y/n) ")
+                
+                while user_choice not in ["y", "n"]:
+                    user_choice = input("Invalid input. Please enter Y or N: ").lower()
                 
                 if user_choice == "y":
                     support_hub_helper_call()
@@ -316,6 +329,7 @@ def run():
 
         else:
             print("Please enter a number between 1 and 6.")
+
 
 if __name__ == "__main__":
     run()

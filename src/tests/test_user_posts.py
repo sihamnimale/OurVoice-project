@@ -10,13 +10,13 @@ class TestGetUserPosts(TestCase):
         # Create a mock API with two user posts (private and public)
         mock_response.json.return_value = [
             {"post_id": 2,
-             "username": "sally54",
+             "username": "usertest002",
              "title": "My second post",
              "post": "I am feeling blessed today",
              "private_public": "private"
             },
             {"post_id": 1,
-             "username": "sally54",
+             "username": "usertest002",
              "title": "My first post",
              "post": "This is my first journal post",
              "private_public": "public"
@@ -26,7 +26,7 @@ class TestGetUserPosts(TestCase):
         res = get_username_entries("sally54")
         # Test the correct API endpoint used
         mock_get.assert_called_once_with(
-            "http://127.0.0.1:5001/sally54",
+            "http://127.0.0.1:5001/usertest002",
             headers={"content-type": "application/json"}
         )
         # Check returned data corresponds to correct user

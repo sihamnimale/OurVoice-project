@@ -10,7 +10,7 @@ class TestGetPublicFeed(TestCase):
         # Create a mock API response
         mock_response.json.return_value = [
             {"post_id": 1,
-             "username": "anna099",
+             "username": "usertest001",
              "title": "My first post",
              "post": "This is my journal post",
              "private_public": "public",

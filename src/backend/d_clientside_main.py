@@ -50,13 +50,13 @@ def like_entry(username, post_id):
 # wants to 1) see our public feed and 2) see their profile, which deatures their own private and public 
 # posts.
 
-def print_helper_func(array, username=None, post_id = None):
+def print_helper_func(array, username=None):
     labs = ["\nPost ID: ", "Username: ", "Title: ", "Post: ", "Status: ", "Likes: ",
             "Userlikes: ", "Hashtags: ", "Affirmation:"]
 
     # this if statement triggers when username and post_id are not set, i.e. when the user has opted to
     # see our public feed.
-    if username is None and post_id is None:
+    if username is None:
         labels = labs * len(array)
         iter_array = list(itertools.chain.from_iterable(array))
         for i, j in list(zip(labels, iter_array)):
@@ -64,7 +64,7 @@ def print_helper_func(array, username=None, post_id = None):
 
     # this if statement triggers when username is set but post_id is now, i.e. when the user has opted to
     # see their own public and private posts.
-    if username is not None and post_id is None:
+    if username is not None:
         username_array = []
         for i in array:
             if i[1] == username:
@@ -118,8 +118,8 @@ def hashtag_generation(post):
         hashtags_q = input("Invalid input. Please enter Y or N: ").lower()
 
     if hashtags_q == "y":
-        print(f"\nHere are some hashtags I can recommend: #{hashtags}")
-        user_hashtags = input("\nYour hashtags: ")
+        print(f"\nHere are some hashtags I can recommend: {hashtags}")
+        user_hashtags = input("\nYour hashtags: #")
     else:
         user_hashtags = ""
 
@@ -179,12 +179,12 @@ def create_post(username):
 
 # affirmations helper function
 
-def affirmations_helper(post_content, post_id=None, username=None):
+def affirmations_helper(post_content):
     affirmation = Affirmations()
     text = affirmation.personalised_affirmation(post_content)
     print(f"\nHere is your personalised affirmation: {text}")
     return text
-    # resp = post_affirmation_to_post(post_id, text)
+   
 
 # this helper function detects keywords that could indicate that support is needed by the user by calling from the 
 # e_class_keyword_detection
@@ -197,7 +197,6 @@ def keyword_trigger(post):
         print("\nSome topics in your post are commonly linked to wellbeing and support.")
         print("If you feel it could be helpful, please consider visiting our Support Hub.\n")
         return True
-    
     return False     
 
 # support hub helper
@@ -326,10 +325,10 @@ def run():
                 if user_choice == "y":
                     support_hub_helper_call()
                 else:
-                    affirm = affirmations_helper(post_content, post_id=post_id, username=username)
+                    affirm = affirmations_helper(post_content)
                     attach_affirmation_to_post(post_id, affirm)
             else:
-                affirm = affirmations_helper(post_content, post_id=post_id, username=username)
+                affirm = affirmations_helper(post_content)
                 attach_affirmation_to_post(post_id, affirm)
                 
         # 3. See our support hub

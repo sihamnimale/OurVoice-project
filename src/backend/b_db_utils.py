@@ -83,7 +83,8 @@ def see_public_feed():
     db_connection.start_transaction()
     # The query specifies we only want public posts to be viewable on Flask.
     query = """SELECT * FROM journal_entries
-               WHERE private_public = 'public'"""
+               WHERE private_public = 'public'
+               ORDER BY post_id DESC"""
     cur.execute(query)
     posts = cur.fetchall()
 

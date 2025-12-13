@@ -45,19 +45,19 @@ This project was developed as part of the Code First Girls Software Engineering 
 ## Project Structure
 
 backend/
-│
-├── SQL DB/                     
+├── SQL DB/
 ├── __init__.py
-├── a_config.py                 
-├── b_db_utils.py               
-├── c_api_server.py             
-├── d_clientside_main.py        
+├── a_config.py
+├── b_db_utils.py
+├── c_api_server.py
+├── d_clientside_main.py
 ├── e_class_keyword_detection.py
 ├── f_class_hashtag_recs.py
 ├── g_class_affirmations.py
 ├── support_hub_data.py
-├── wellness_resources.py
 ├── welcome_message.py
+└── wellness_resources.py
+
 
 
 ## Getting Started

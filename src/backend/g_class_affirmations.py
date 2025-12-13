@@ -1,6 +1,15 @@
+import os # This is used to access environment variable
 import requests
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer # a module to provide us with a sentiment score of a user's post
+from dotenv import load_dotenv
 import random
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Access API key from the environment variable
+RAPIDAPI_KEY = os.environ.get('RAPIDAPI_KEY')
+# RAPIDAPI_KEY = "f6861a6851msh4a539514036d796p13f225jsn55c3f8caa100" # will be removed and kept in .env file
 
 # firstly, we have written a class with a method to analyze text using a sentiment analyzer module called vaderSentiment 
 # to assign the labels positive, negative or neutral to the text with this label, we will then be able to provide 
@@ -41,7 +50,6 @@ PSEUDO CODE FOR THE AFFIRMATION API:
 
 API_HOST = "affirmations-api-by-apirobots.p.rapidapi.com"
 BASE_URL = "https://affirmations-api-by-apirobots.p.rapidapi.com/v1/affirmations/categories"
-RAPIDAPI_KEY = "f6861a6851msh4a539514036d796p13f225jsn55c3f8caa100"
 
 headers = {
     "x-rapidapi-key": RAPIDAPI_KEY,

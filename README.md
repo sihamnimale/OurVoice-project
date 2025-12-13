@@ -52,11 +52,9 @@ backend/
 ├── b_db_utils.py               
 ├── c_api_server.py             
 ├── d_clientside_main.py        
-│
 ├── e_class_keyword_detection.py
 ├── f_class_hashtag_recs.py
 ├── g_class_affirmations.py
-│
 ├── support_hub_data.py
 ├── wellness_resources.py
 ├── welcome_message.py

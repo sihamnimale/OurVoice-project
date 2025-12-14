@@ -23,7 +23,7 @@ class TestGetUserPosts(TestCase):
             },
         ]
         mock_get.return_value = mock_response
-        res = get_username_entries("sally54")
+        res = get_username_entries("usertest002")
         # Test the correct API endpoint used
         mock_get.assert_called_once_with(
             "http://127.0.0.1:5001/usertest002",

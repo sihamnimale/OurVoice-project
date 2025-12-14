@@ -11,42 +11,35 @@ OurVoice intentionally avoids features such as comments or direct messaging. Thi
 This project was developed as part of the Code First Girls Software Engineering Degree.
 
 ## Features
-Main Features:
 - Create journal entries (public or private)
 - View a public feed of shared reflections
 - View a personal profile with all your posts
 - Like public posts 
 - Support Hub with trusted wellbeing organisations
 - Wellness & Career Hub for development resources
-- Receive personalised affirmations 
+- Receive personalised affirmations based on sentiment analysis
 
 ## Project File Description
-Backend
-- [config.py]() - keep database credentials
-- [db_utils.py]() - sql operations
+### Backend
+- [config.py]() - database connection information 
+- [db_utils.py]() - database utilities functions for sql operations
 - [api_server.py]() - api endpoints
-- [clientside_main.py]() - main app that handles the menu, API calls and user input. 
+- [clientside_main.py]() - main app file that handles the menu, user input and api calls. 
 - [class_keyword_detection.py]() - triggers the support suggestion.
 - [class_hashtag_recs.py]() - NLTK keyword extraction for hashtag recommendation
-- [class_afirmations.py]() - sentiment analysis and external api for affirmations
-- [support_hub_data.py]() - wellbeing resources 
+- [class_affirmations.py]() - sentiment analysis and external api for affirmations
+- [support_hub_data.py]() - wellbeing resources for the support hub
 - [wellness_resources.py]() - learning, productivity and wellness resources
 
-Other files:
-- SQL_DB.sql - database storage
-- [requirements.txt]() - Python required packages
+### Other files:
+- SQL_DB.sql - sql schema for database setup
+- [requirements.txt]() - required Python packages
 
 ## Getting Started
 
 ### Requirements
 - Python 3.x.x
 - MySQL
-- Flask
-- mysql-connector-python
-- requests
-- python-dotenv
-- vaderSentiment
-- nltk
 
 ### Installation & Setup
 1. Clone the repository
@@ -69,10 +62,10 @@ pip install -r requirements.txt
 
 4. Set up the MYSQL database
 - Open MYSQL or MYSQL Workbench
-- Run the SQL schema included in the SQL_DB file
+- Run the SQL schema in the SQL_DB file
 
 5. Configure database credentials
-- In my config.py, set your MYSQL credentials
+- Open config.py, set your MYSQL credentials
 
 6. Download required NLTK data
 Run the following once in a Python shell:
@@ -83,6 +76,7 @@ nltk.download('punkt_tab')
 nltk.download('averaged_perceptron_tagger')
 nltk.download('averaged_perceptron_tagger_eng')
 ```
+
 ### Environment Variables
 
 This project uses an external affirmations API via RapidAPI. 

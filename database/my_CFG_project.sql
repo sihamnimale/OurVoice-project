@@ -10,7 +10,7 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-# JOURNAL ENTRIES TABLE. Stores entries written by users (core of the app)
+-- JOURNAL ENTRIES TABLE. Stores entries written by users (core of the app)
 
 CREATE TABLE journal_entries (
     post_id INTEGER PRIMARY KEY AUTO_INCREMENT,   
@@ -27,6 +27,7 @@ CREATE TABLE journal_entries (
 
 ALTER TABLE journal_entries AUTO_INCREMENT = 1;
 
--- to check the tables have been created correctly
+-- To check the tables have been created correctly
+
 SELECT * FROM users;
 SELECT * FROM journal_entries;

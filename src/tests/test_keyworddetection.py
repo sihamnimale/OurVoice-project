@@ -1,3 +1,12 @@
+import sys
+from pathlib import Path
+
+# ensure `src` package is importable when running this file directly
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+# also add backend to sys.path for absolute imports in backend modules
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
+
 from unittest import TestCase
 from backend.e_class_keyword_detection import KeywordDetection
 
@@ -12,7 +21,7 @@ class TestKeywordDetection(TestCase):
     # This test checks that specific keywords would trigger support in a user's post entry
     def test_keywordtrigger_on_depression(self):
         content = "I’ve been so depressed lately that I can barely get out of bed."
-        self.assertTrue(self.detector.detect_keywords(content))
+        self.assertTrue(self.detector.detect_keywords(content))        
 
     def test_keywordtrigger_on_eviction_risk(self):
         content = "I might get evicted next month and I’m really scared I could be on the verge of being homeless."

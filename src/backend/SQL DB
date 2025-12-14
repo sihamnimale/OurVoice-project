@@ -1,0 +1,32 @@
+DROP DATABASE IF EXISTS my_CFG_project;
+CREATE DATABASE my_CFG_project;
+USE my_CFG_project;
+
+-- USERS TABLE. Stores basic info about each user, needed to link journal entries to people
+	
+CREATE TABLE users (
+    user_id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(250) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+# JOURNAL ENTRIES TABLE. Stores entries written by users (core of the app)
+
+CREATE TABLE journal_entries (
+    post_id INTEGER PRIMARY KEY AUTO_INCREMENT,   
+    username VARCHAR(250),                      
+    title TEXT,                                  
+    post TEXT NOT NULL,                          
+    private_public VARCHAR(20) NOT NULL,         
+    likes INTEGER NOT NULL DEFAULT 0,            
+    user_likes VARCHAR(250) DEFAULT "",          
+    hashtags TEXT, 
+    affirmation VARCHAR(250),
+    FOREIGN KEY (username) REFERENCES users(username)
+); 
+
+ALTER TABLE journal_entries AUTO_INCREMENT = 1;
+
+-- to check the tables have been created correctly
+SELECT * FROM users;
+SELECT * FROM journal_entries;

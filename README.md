@@ -1,15 +1,5 @@
 # OurVoice
 
-## Table of Contents
-- Description
-- Features
-- Project Folder
-- Getting Started
-- Running the App
-- Testing
-- Authors
-- Acknowledgements
-
 ## Description
 
 OurVoice is a terminal-based journaling and wellbeing application designed to provide users with a calm, low-pressure digital space for reflection and support.
@@ -21,44 +11,26 @@ OurVoice intentionally avoids features such as comments or direct messaging. Thi
 This project was developed as part of the Code First Girls Software Engineering Degree
 
 ## Features
-
 - Create journal entries (public or private)
-
 - View a public feed of shared reflections
-
 - View a personal profile with all your posts
-
-- Like public posts (duplicate likes prevented)
-
-- Keyword detection to suggest relevant support resources
-
+- Like public posts 
 - Support Hub with trusted wellbeing organisations
-
 - Wellness & Career Hub for development resources
+- Receive personalised affirmations 
 
-- Sentiment analysis using vaderSentiment
-
-- Personalised affirmations via an external API
-
-- Persistent data storage using MySQL
-
-## Project Structure
-
-backend/
-├── SQL DB/
-├── __init__.py
-├── a_config.py
-├── b_db_utils.py
-├── c_api_server.py
-├── d_clientside_main.py
-├── e_class_keyword_detection.py
-├── f_class_hashtag_recs.py
-├── g_class_affirmations.py
-├── support_hub_data.py
-├── welcome_message.py
-└── wellness_resources.py
-
-
+## Project File Description
+config.py - Stores MySQL credentials and configuration values
+db_utils.py - Contains all SQL operations 
+api_server.py - Call our Flask API providing all routes
+clientside_main.py - The main file that handles menus, API calls and all user interactions.
+class_keyword_detection.py - Contains logic that scans user posts for keywords and triggers the support suggestion.
+class_hashtag_recs.py - NLP-based hashtag recommendation using NLTK keyword extraction
+class_afirmations.py - This file processes sentiment analysis and external API calls to generate personalised affirmations
+support_hub_data.py - Data file to store wellbeing resources for the support hub
+wellness_resources.py - Data file to to store learning, productivity and wellness resources
+welcome_message.py - File containing the application's introduction message. 
+SQL_DB - SQL schema and setup script (users, journal entries)
 
 ## Getting Started
 
@@ -68,8 +40,9 @@ backend/
 - Flask
 - mysql-connector-python
 - requests
-- nltk
+- python-dotenv
 - vaderSentiment
+- nltk
 
 ### Installation
 1. Clone the repository
@@ -78,25 +51,38 @@ git clone https://github.com/yousely15/cfg-group-project.git
 cd src/backend
 ```
 
-2. Create a virtual environment
+2. MYSQL database setup
+- Open MYSQL or MYSQL Workbench
+- Run the SQL schema included in the file
+
+3. Configure database credential
+- In my config.py, set your MYSQL credentials
+
+4. Environment variable for API key
+- Create a .env file and add:
+```
+RAPIDAPI_KEY = 'your_api_key_here'
+```
+
+5. Create and activate a virtual environment
 ```
 python -m venv .venv
+. .venv/bin/activate        # Mac/Linux
+.venv\Scripts\activate      # Windows
 ```
 
-3. Activate the virtual environment
-- For Mac/Linux:
-```
-. .venv/bin/activate
-```
-
-- For Windows:
-```
-.venv\Scripts\activate
-```
-
-4. Install packages
+6. Install packages
 ```
 pip install -r requirements.txt
+```
+
+7. Download required NLTK data
+```
+import nltk
+nltk.download('punkt')
+nltk.download('punkt_tab')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('averaged_perceptron_tagger_eng')
 ```
 
 ## Running the App
@@ -104,6 +90,12 @@ pip install -r requirements.txt
 ```
 python c_api_server.py
 ```
+
+The API will run on:
+```
+http://127.0.0.1:5001
+```
+
 2. Run the Client
 ```
 python d_clientside_main.py
@@ -116,6 +108,3 @@ python d_clientside_main.py
 ## Authors
 
 ## Acknowledgements
-
-
-

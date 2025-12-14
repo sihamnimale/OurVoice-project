@@ -30,4 +30,4 @@ class TestGetUserPosts(TestCase):
             headers={"content-type": "application/json"}
         )
         # Check returned data corresponds to correct user
-        self.assertEqual(res[0]["username"], "sally54")
+        self.assertEqual(res[0]["username"], "usertest002")

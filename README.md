@@ -107,8 +107,30 @@ python d_clientside_main.py
 3. Follow the interactive prompts in the terminal. 
 
 ## Testing
+All test files are located in `src/tests/`.
+Each test file can be run individually using the Run button in your IDE or by running the file from the terminal.
 
+1. Unit tests 
 
+From the `src/` folder:
+```
+python tests/test_keyworddetection.py
+python tests/test_public_feed.py
+python tests/test_user_posts.py
+```
+
+2. Manual testing
+
+These were used to verify helper functions that print to the terminal or involve user input.
+
+From the `src/` folder:
+```
+python tests/test_affirmations.py
+python tests/test_printer_function.py
+python tests/test_support_helper_function.py
+python tests/test_wellness_hub.py
+python tests/test_hashtag_recs.py
+```
 
 ## Authors
 [Alisha](), [Mia](), [Yousr](), [Sara](), [Chimna](), [Siham](), [Priscilla]()

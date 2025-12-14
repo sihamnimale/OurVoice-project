@@ -21,15 +21,15 @@ This project was developed as part of the Code First Girls Software Engineering 
 
 ## Project File Description
 ### Backend
-- [config.py]() - database connection information 
-- [db_utils.py]() - database utilities functions for sql operations
-- [api_server.py]() - api endpoints
-- [clientside_main.py]() - main app file that handles the menu, user input and api calls. 
-- [class_keyword_detection.py]() - triggers the support suggestion.
-- [class_hashtag_recs.py]() - NLTK keyword extraction for hashtag recommendation
-- [class_affirmations.py]() - sentiment analysis and external api for affirmations
-- [support_hub_data.py]() - wellbeing resources for the support hub
-- [wellness_resources.py]() - learning, productivity and wellness resources
+- [config.py](https://github.com/yousely15/cfg-group-project/blob/main/src/backend/a_config.py) - database connection information 
+- [db_utils.py](https://github.com/yousely15/cfg-group-project/blob/main/src/backend/b_db_utils.py) - database utilities functions for sql operations
+- [api_server.py](https://github.com/yousely15/cfg-group-project/blob/main/src/backend/c_api_server.py) - api endpoints
+- [clientside_main.py](https://github.com/yousely15/cfg-group-project/blob/main/src/backend/d_clientside_main.py) - main app file that handles the menu, user input and api calls. 
+- [class_keyword_detection.py](https://github.com/yousely15/cfg-group-project/blob/main/src/backend/e_class_keyword_detection.py) - triggers the support suggestion.
+- [class_hashtag_recs.py](https://github.com/yousely15/cfg-group-project/blob/main/src/backend/f_class_hashtag_recs.py) - NLTK keyword extraction for hashtag recommendation
+- [class_affirmations.py](https://github.com/yousely15/cfg-group-project/blob/main/src/backend/g_class_affirmations.py) - sentiment analysis and external api for affirmations
+- [support_hub_data.py](https://github.com/yousely15/cfg-group-project/blob/main/src/backend/support_hub_data.py) - wellbeing resources for the support hub
+- [wellness_resources.py](https://github.com/yousely15/cfg-group-project/blob/main/src/backend/wellness_resources.py) - learning, productivity and wellness resources
 
 ### Other files:
 - SQL_DB.sql - sql schema for database setup
@@ -133,7 +133,7 @@ python tests/test_hashtag_recs.py
 ```
 
 ## Authors
-[Alisha](), [Mia](), [Yousr](), [Sara](), [Chimna](), [Siham](), [Priscilla]()
+[Alisha](https://github.com/Alisha71), [Mia](https://github.com/miamccl), [Yousr](https://github.com/yousely15), [Sara](https://github.com/sara-hyder), [Chimna](https://github.com/CLIONN3), [Siham](https://github.com/sihamnimale), Priscilla
 
 ## Acknowledgements
-We would like to thank Code First Girls and our instructors for their guidance and support throughout the course and the project. 
+Thanks to Code First Girls and the wider community for your continued guidance and support throughout the CFG course. 

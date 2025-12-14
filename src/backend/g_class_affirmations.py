@@ -1,4 +1,4 @@
-import os # This is used to access environment variable
+import os 
 import requests
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer # a module to provide us with a sentiment score of a user's post
 from dotenv import load_dotenv
@@ -9,7 +9,6 @@ load_dotenv()
 
 # Access API key from the environment variable
 RAPIDAPI_KEY = os.environ.get('RAPIDAPI_KEY')
-# RAPIDAPI_KEY = "f6861a6851msh4a539514036d796p13f225jsn55c3f8caa100" # will be removed and kept in .env file
 
 """
 This file contains two connected classes:

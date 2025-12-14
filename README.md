@@ -8,7 +8,7 @@ The app allows users to write journal entries that can be kept private or shared
 
 OurVoice intentionally avoids features such as comments or direct messaging. This design choice prioritises user safety, autonomy, and emotional comfort, ensuring the platform remains reflective rather than performative.
 
-This project was developed as part of the Code First Girls Software Engineering Degree
+This project was developed as part of the Code First Girls Software Engineering Degree.
 
 ## Features
 - Create journal entries (public or private)

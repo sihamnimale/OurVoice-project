@@ -20,11 +20,6 @@ Main Features:
 - Wellness & Career Hub for development resources
 - Receive personalised affirmations 
 
-Other Supporting Features:
-- Hashtag recommendations using NLP
-- Keyword detection to trigger support hub suggestions
-- Sentiment analysis to determines pesonalised affirmation
-
 ## Project File Description
 Backend
 - [config.py]() - keep database credentials
@@ -117,10 +112,7 @@ python d_clientside_main.py
 3. Follow the interactive prompts
 
 ## Testing
-1. Navigate to the src directory
-```
-python -m unittest
-```
+
 
 ## Authors
 [Alisha](), [Mia](), [Yousr](), [Sara](), [Chimna](), [Siham](), [Priscilla]()

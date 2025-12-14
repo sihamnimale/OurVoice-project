@@ -7,7 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 # also add backend to sys.path for absolute imports in backend modules
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
 
-from unittest import TestCase, mock
+from unittest import TestCase, mock, main
 from backend.d_clientside_main import get_public_feed
 
 # Testing public feed API call returns data correctly
@@ -37,3 +37,6 @@ class TestGetPublicFeed(TestCase):
         )
         # Tests that the returned data matches the mock response
         self.assertEqual(res[0]['post'], "This is my journal post")
+
+if __name__ == "__main__":
+    main() 

@@ -7,7 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 # also add backend to sys.path for absolute imports in backend modules
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'backend'))
 
-from unittest import TestCase
+from unittest import TestCase, main
 from backend.e_class_keyword_detection import KeywordDetection
 
 # Testing the keyword detection function to correctly detect serious keywords in a user's post entry
@@ -35,3 +35,6 @@ class TestKeywordDetection(TestCase):
     def test_does_not_trigger_on_financial_goal(self):
         content = "I want to start investing but I’m scared of getting it wrong."
         self.assertFalse(self.detector.detect_keywords(content))
+
+if __name__ == "__main__":
+    main() 

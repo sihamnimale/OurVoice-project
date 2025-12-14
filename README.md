@@ -45,7 +45,7 @@ This project was developed as part of the Code First Girls Software Engineering 
 1. Clone the repository
 ```
 git clone https://github.com/yousely15/cfg-group-project.git
-cd src/backend
+cd cfg-group-project
 ```
 
 2. Create and activate a virtual environment
@@ -65,7 +65,7 @@ pip install -r requirements.txt
 - Run the SQL schema in the SQL_DB file
 
 5. Configure database credentials
-- Open config.py, set your MYSQL credentials
+- Open config.py, set your MYSQL host, username and password
 
 6. Download required NLTK data
 Run the following once in a Python shell:
@@ -90,6 +90,7 @@ RAPIDAPI_KEY = 'your_api_key_here'
 ## Running the App
 1. Start the Flask API Server
 ```
+cd src/backend
 python c_api_server.py
 ```
 
@@ -103,7 +104,7 @@ http://127.0.0.1:5001
 python d_clientside_main.py
 ```
 
-3. Follow the interactive prompts
+3. Follow the interactive prompts in the terminal. 
 
 ## Testing
 

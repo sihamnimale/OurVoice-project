@@ -20,17 +20,17 @@ This project was developed as part of the Code First Girls Software Engineering 
 - Receive personalised affirmations 
 
 ## Project File Description
-config.py - Stores MySQL credentials and configuration values
-db_utils.py - Contains all SQL operations 
-api_server.py - Call our Flask API providing all routes
-clientside_main.py - The main file that handles menus, API calls and all user interactions.
-class_keyword_detection.py - Contains logic that scans user posts for keywords and triggers the support suggestion.
-class_hashtag_recs.py - NLP-based hashtag recommendation using NLTK keyword extraction
-class_afirmations.py - This file processes sentiment analysis and external API calls to generate personalised affirmations
-support_hub_data.py - Data file to store wellbeing resources for the support hub
-wellness_resources.py - Data file to to store learning, productivity and wellness resources
-welcome_message.py - File containing the application's introduction message. 
-SQL_DB - SQL schema and setup script (users, journal entries)
+- config.py - Stores MySQL credentials and configuration values
+- db_utils.py - Contains all SQL operations 
+- api_server.py - Call our Flask API providing all routes
+- clientside_main.py - The main file that handles menus, API calls and all user interactions.
+- class_keyword_detection.py - Contains logic that scans user posts for keywords and triggers the support suggestion.
+- class_hashtag_recs.py - NLP-based hashtag recommendation using NLTK keyword extraction
+- class_afirmations.py - This file processes sentiment analysis and external API calls to generate personalised affirmations
+- support_hub_data.py - Data file to store wellbeing resources for the support hub
+- wellness_resources.py - Data file to to store learning, productivity and wellness resources
+- welcome_message.py - File containing the application's introduction message. 
+- SQL_DB - SQL schema and setup script (users, journal entries)
 
 ## Getting Started
 
@@ -104,7 +104,13 @@ python d_clientside_main.py
 3. Follow the interactive prompts
 
 ## Testing
+1. Navigate to the src directory
+```
+python -m unittest
+```
 
 ## Authors
+Alisha, Mia, Yousr, Sara, Chimna, Siham, Priscilla
 
 ## Acknowledgements
+We would like to thank Code First Girls and our instructors for their guidance and support throughout the course and the project. 

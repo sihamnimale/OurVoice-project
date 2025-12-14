@@ -29,10 +29,8 @@ class KeywordDetection:
         content = content.lower()
         # Remove punctuation
         content = content.translate(str.maketrans("", "", string.punctuation))
-
         # Split into words
         words = content.split()
-
         # Check for any matching keywords
         for word in words:
             for keyword in self.keywords:

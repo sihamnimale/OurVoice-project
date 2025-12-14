@@ -48,7 +48,7 @@ database communication and user interactions within OurVoice.
 """
 
 #----------------------------------------------------------------------------
-#                     WELCOME ROUTE
+#                              WELCOME ROUTE
 #----------------------------------------------------------------------------
 # A welcoming message to the user.
 @app.route('/welcome')
@@ -56,7 +56,7 @@ def welcome():
     return welcome_message
 
 #----------------------------------------------------------------------------
-#                     PUBLIC FEED ROUTE (GET)
+#                           PUBLIC FEED ROUTE (GET)
 #----------------------------------------------------------------------------
 # Establishing a route for the user to see all public posts.
 @app.route('/feed')
@@ -68,7 +68,7 @@ def public_feed():
     return jsonify(see_public_feed())
 
 #----------------------------------------------------------------------------
-#                     USER-SPECIFIC POSTS (GET)
+#                           USER-SPECIFIC POSTS (GET)
 #----------------------------------------------------------------------------
 # Route to get both public and private entries for that user by their username.
 @app.route('/<username>')
@@ -87,9 +87,9 @@ def username_entries(username):
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 #----------------------------------------------------------------------------
-#                     SUPPORT HUB RESOURCES
+#                           SUPPORT HUB RESOURCES
 #----------------------------------------------------------------------------
-# Provides access to our support hub.
+# Provides access to our support hub (DB stored in python file)
 @app.route('/support_hub')
 def support_hub_resources():
     """
@@ -101,9 +101,9 @@ def support_hub_resources():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 #----------------------------------------------------------------------------
-#                WELLNESS + CAREER RESOURCES
+#                       WELLNESS + CAREER RESOURCES
 #----------------------------------------------------------------------------
-# Provides access to our wellness and career hub.
+# Provides access to our wellness and career hub (DB stored in python file)
 @app.route('/wellness_career')
 def wellness_career_resources_route():
     """
@@ -115,7 +115,7 @@ def wellness_career_resources_route():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 #----------------------------------------------------------------------------
-#                 CREATE NEW POST (PUBLIC / PRIVATE)
+#                   CREATE NEW POST (PUBLIC / PRIVATE)
 #----------------------------------------------------------------------------
 # Route to handle creating a new public or private entry.
 @app.route('/feed', methods=['POST'])
@@ -149,8 +149,9 @@ def add_public_entry():
         return jsonify({"status": "error", "message": str(e)}), 400
 
 #----------------------------------------------------------------------------
-#                   VIEW A POST BY ID (GET)
+#                         VIEW A POST BY ID (GET)
 #----------------------------------------------------------------------------
+# Route to view a specific post by its post_id.
 @app.route('/feed/<int:post_id>', methods=['GET'])
 def see_post_by_postid(post_id):
     """
@@ -169,7 +170,7 @@ def see_post_by_postid(post_id):
     return jsonify(post)
 
 #----------------------------------------------------------------------------
-#                   LIKE A PUBLIC POST (POST)
+#                        LIKE A PUBLIC POST (POST)
 #----------------------------------------------------------------------------
 # Establishing a POST route to enable a user to like to a public entry (see description above).
 @app.route('/feed/<int:post_id>', methods=['POST'])
@@ -185,6 +186,7 @@ def like_pub_entry(post_id):
         return redirect(url_for('see_post_by_postid', post_id=post_id))
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 400
+
 
 # So flask will automatically restart when you make code changes
 if __name__ == '__main__':

@@ -4,6 +4,7 @@ from a_config import USER, PASSWORD, HOST
 #----------------------------------------------------------------------------
 #                      CUSTOM EXCEPTIONS:
 #----------------------------------------------------------------------------
+
 # Custom exception to handle database connection errors.
 class DbConnectionError(Exception):
     pass
@@ -11,6 +12,7 @@ class DbConnectionError(Exception):
 #----------------------------------------------------------------------------
 #                    DATABASE CONNECTION HELPERS:
 #----------------------------------------------------------------------------
+
 # Private function to connect to the database.
 def _connect_to_db(db_name):
     # Connects to the MySQL database with the given name.
@@ -27,8 +29,11 @@ def _connect_to_db(db_name):
     except Exception:
         raise DbConnectionError("Database connection failed.")
 
+#----------------------------------------------------------------------------
+#         TO SUPPORT STORAGE OF AND NON DUPLICATION OF USERNAMES:
+#----------------------------------------------------------------------------
 
-# INSERTING NEW USERS INTO THE USER TABLE IN THE DATABASE
+# this function inserts a new username into the users table in the DB
 def username_entry(entry_data):
     db_name="my_CFG_project"
     connection = _connect_to_db(db_name)
@@ -45,7 +50,8 @@ def username_entry(entry_data):
     cursor.close()
     connection.close()
 
-#RETRIEVING THE USERS FROM THE USER TABLE IN THE DATABASE
+# this function retrieves all usernames from the users table in the DB in the 
+# form of a list
 def get_usernames():
     db_name="my_CFG_project"
     connection = _connect_to_db(db_name)
@@ -56,19 +62,16 @@ def get_usernames():
         """
 
     cursor.execute(sql)
-    usernames = cursor.fetchall()
+    rows = cursor.fetchall()
     cursor.close()
     connection.close()
 
-    for user in usernames:
-        usernames = [username[0] for username in usernames]
-
-    return usernames
-
+    return [row[0] for row in rows]
 
 #----------------------------------------------------------------------------
-#                  FETCHING POSTS FROM THE DATABASE:
+#                     FETCHING POSTS FROM THE DATABASE:
 #----------------------------------------------------------------------------
+
 # Function connecting to the SQL DB to retrieve all public posts.
 def see_public_feed():
     """
@@ -81,7 +84,8 @@ def see_public_feed():
     db_connection = _connect_to_db(db_name)
     cur = db_connection.cursor()
     db_connection.start_transaction()
-    # The query specifies we only want public posts to be viewable on Flask.
+    
+    # The query specifies that we only want PUBLIC posts to be viewable on Flask.
     query = """SELECT * FROM journal_entries
                WHERE private_public = 'public'
                ORDER BY post_id DESC"""
@@ -108,7 +112,8 @@ def see_post_by_id(post_id):
     cur = db_connection.cursor()
 
     db_connection.start_transaction()
-    # The query specifies we only want public posts of a particular id to be viewable on Flask.
+    
+    # This query specifies we only want public posts of a particular id to be viewable on Flask.
     query = """SELECT * FROM journal_entries
                WHERE post_id = %s AND private_public = 'public'"""
     cur.execute(query, (post_id,))
@@ -121,8 +126,9 @@ def see_post_by_id(post_id):
     return post
 
 #----------------------------------------------------------------------------
-#                RETRIEVING USER-SPECIFIC POSTS:
+#                     RETRIEVING USER-SPECIFIC POSTS:
 #----------------------------------------------------------------------------
+
 # Function to obtain public and private posts from a specific user.
 def user_specific_posts(username):
     """
@@ -136,7 +142,8 @@ def user_specific_posts(username):
     db_connection = _connect_to_db(db_name)
     cur = db_connection.cursor()
 
-    # Query both public and private posts for a specific user from the most recent posts to be viewed.
+    # Query for both public and private posts for a specific user 
+    # the most recent posts to be viewed at the top of the feed.
     db_connection.start_transaction()
     query = """
         SELECT * FROM journal_entries
@@ -150,11 +157,13 @@ def user_specific_posts(username):
     if db_connection:
         cur.close()
         db_connection.close()
+    
     return user_posts
 
 #----------------------------------------------------------------------------
-#                        CREATING NEW POSTS:
+#                           CREATING NEW POSTS:
 #----------------------------------------------------------------------------
+
 # Function to add a new post into the SQL database.
 def user_entry(entry_data, db_name="my_CFG_project"):
     """
@@ -175,17 +184,19 @@ def user_entry(entry_data, db_name="my_CFG_project"):
     """
     connection = _connect_to_db(db_name)
     cursor = connection.cursor()
+
+    # this quert inserts the data necessary to create a new post.
     sql = """
         INSERT INTO journal_entries (username, title, post, private_public, likes, user_likes, hashtags)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
     """
     values = (
-        entry_data["username"],          # maps to username column
+        entry_data["username"], # maps to username column
         entry_data["title"],
         entry_data["post"],
         entry_data["private_public"],
-        0,                           # likes
-        "",                          # user_likes
+        0, # likes default value
+        "", # user_likes default value
         entry_data["hashtags"]
     )
     cursor.execute(sql, values)
@@ -193,12 +204,19 @@ def user_entry(entry_data, db_name="my_CFG_project"):
     new_post_id = cursor.lastrowid
     cursor.close()
     connection.close()
+
     return new_post_id
 
 #----------------------------------------------------------------------------
-#                       LIKING A PUBLIC POST:
+#                          LIKING A PUBLIC POST:
 #----------------------------------------------------------------------------
-# Function connecting to the SQL DB to change the likes and user_likes column in SQL.
+
+# Function connecting to the SQL DB to change the likes and user_likes column in 
+# SQL. This is necessary for the clientside run(), as after the user is able to
+# see a feed of public posts, they will be asked if they want to like a particular
+# post in that feed. Hence, we need a function to increment likes in the SQL DB and
+# store the name of the user who has liked the post, which we have termed the userlike.
+
 def like_public_entry(userlike, post_id):
     """
     Updates the likes count for a given post and appends the username to the
@@ -214,8 +232,8 @@ def like_public_entry(userlike, post_id):
 
     try:
         db_connection.start_transaction()
-        # This query specifies we only want to update the likes and user_likes column on SQL
-        # in the journal_entries table.
+        # This query specifies we only want to update the likes and user_likes column 
+        # on SQL in the journal_entries table.
         query = """UPDATE journal_entries 
                    SET likes = likes + 1,
                        user_likes = CONCAT(user_likes, %s, " ")
@@ -239,11 +257,12 @@ def like_public_entry(userlike, post_id):
         db_connection.close()
 
 #----------------------------------------------------------------------------
-#                       CHECKING USER LIKES:
+#                          CHECKING USER LIKES:
 #----------------------------------------------------------------------------
+
 # Function connecting to the SQL DB to retrieve user_likes ONLY, as a list.
 # This is necessary for the clientside run(), to check if the user liking a particular
-# Post has liked the post previously. If their username is in the list of user_likes,
+# post has liked the post previously. If their username is in the list of user_likes,
 # As produced by this function, they will not be able to like the post again.
 # This function therefore helps prevent users from liking posts repeatedly.
 def user_likes(post_id):
@@ -252,6 +271,7 @@ def user_likes(post_id):
     cur = db_connection.cursor()
 
     db_connection.start_transaction()
+
     # this query requests just the user_likes for a particular post
     query = """SELECT user_likes FROM journal_entries WHERE post_id = %s"""
     cur.execute(query, (post_id,))
@@ -268,13 +288,16 @@ def user_likes(post_id):
     return userlikes[0].split()
 
 #----------------------------------------------------------------------------
-#                       POSTING AFFIRMATIONS TO THE DATABASE:
+#                  POSTING AFFIRMATIONS TO THE DATABASE:
 #----------------------------------------------------------------------------
-# Function inserting a new row into the SQL DB that includes an affirmation.
-# This is necessary for us to store the affirmations given to the clients.
+
+# Function inserting a new value into the journal entries table in the SQL DB 
+# i.e. an affirmation. It is necessary for us to insert the affirmations separately
+# to the other post data, as if a user's post contains concerning language, they
+# may opt to be rerouted to the support hub, in which case an affirmation will not be
+# generated for them.
 
 def attach_affirmation_to_post(post_id, affirmation, db_name="my_CFG_project"):
-    
     conn = None
     try:
         conn = _connect_to_db(db_name)

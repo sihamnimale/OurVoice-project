@@ -29,7 +29,7 @@ Both classes work together to create a gentle, tailored user experience.
 """
 
 # -------------------------------------------------------------------------
-# SENTIMENT ANALYSIS CLASS
+#                       SENTIMENT ANALYSIS CLASS
 # -------------------------------------------------------------------------
 class SentimentAnalysis:
     """
@@ -64,7 +64,7 @@ class SentimentAnalysis:
         return self.label
 
 # -------------------------------------------------------------------------
-# AFFIRMATION API CLASS
+#                          AFFIRMATION API CLASS
 # -------------------------------------------------------------------------
 # Secondly, we have writen a further class to send requests to RAPID API, which is an API which provides affirmations
 # that have been categorised by things like love, health, happiness. The labels returned from the sentiment correspond
@@ -72,7 +72,6 @@ class SentimentAnalysis:
 
 API_HOST = "affirmations-api-by-apirobots.p.rapidapi.com"
 BASE_URL = "https://affirmations-api-by-apirobots.p.rapidapi.com/v1/affirmations/categories"
-
 headers = {
     "x-rapidapi-key": RAPIDAPI_KEY,
     "x-rapidapi-host": API_HOST
@@ -123,7 +122,7 @@ class Affirmations(SentimentAnalysis):
             print("Error with API service, apologies.", e)
             return "All is good. Take a breath, you matter"
 
-    # This function pieces everything together, by firstly using the text_analysis function in the sentiment analysis class
+    # This method pieces everything together, by firstly using the text_analysis function in the sentiment analysis class
     # to produce a label, then calling on the affirmation_category function above to link the label with a category, then finally
     # the return line inserts that category in to the get_affirmation function, to provide an affirmation within the chosen category
     def personalised_affirmation(self, text):

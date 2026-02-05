@@ -208,5 +208,5 @@ __marimo__/
 local_backups/
 
 # IDE / Editor settings
-.idea/
+.idea
 .vscode/
